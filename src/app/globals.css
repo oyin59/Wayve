@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+/* Wayve palette – same tokens as the React MVP's index.css */
+@theme {
+  --color-blue-sky: #C4DAE8;
+  --color-butter: #FEEFB8;
+  --color-brown: #432F2E;
+}
