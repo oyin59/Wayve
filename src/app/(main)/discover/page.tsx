@@ -406,13 +406,6 @@ export default function DiscoverPage() {
               🎲 Surprise me
             </button>
 
-            <button
-              type="button"
-              onClick={() => router.push("/businesses")}
-              className="rounded-full border border-[#E6D56D] bg-white px-5 py-3 font-medium text-brown shadow-sm transition-transform hover:bg-[#FFF0B5]/40 active:scale-95"
-            >
-              🏪 Businesses
-            </button>
           </div>
         </section>
 

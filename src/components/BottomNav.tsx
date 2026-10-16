@@ -21,30 +21,6 @@ export default function BottomNav() {
           <span className="text-lg">✦</span>
           Discover
         </Link>
-        {/* Map */}
-        <Link
-          href="/map"
-          className={`flex flex-col items-center gap-1 text-xs ${
-            isActive("/map")
-              ? "text-butter font-semibold"
-              : "text-butter/50"
-          }`}
-        >
-          <span className="text-lg">🗺️</span>
-          Map
-        </Link>
-        {/* Community */}
-        <Link
-          href="/community"
-          className={`flex flex-col items-center gap-1 text-xs ${
-            isActive("/community")
-             ? "text-butter font-semibold"
-              : "text-butter/50"
-          }`}
-        >
-          <span className="text-lg">💬</span>
-          Community
-        </Link>
         {/* Saved */}
         <Link
           href="/saved"
