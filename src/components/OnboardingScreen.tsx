@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
-import { ONBOARDING_STEPS } from "@/lib/onboarding";
+import { markOnboardingComplete, ONBOARDING_STEPS } from "@/lib/onboarding";
 
 interface Slide {
   eyebrow: string;
@@ -101,6 +101,10 @@ if (process.env.NODE_ENV !== "production" && SLIDES.length !== ONBOARDING_STEPS)
 export default function OnboardingScreen({ step }: { step: number }) {
   const router = useRouter();
   const slide = SLIDES[step - 1];
+  const handleSkip = () => {
+    markOnboardingComplete();
+    router.push("/discover");
+  };
 
   return (
     <div className="min-h-screen bg-[#FCF1D0] text-[#432F2E] flex flex-col px-6 py-6 max-w-md mx-auto">
@@ -110,7 +114,7 @@ export default function OnboardingScreen({ step }: { step: number }) {
           Way<span className="italic text-[#8DBBD4]">ve</span>
         </h1>
         <button
-          onClick={() => router.push("/discover")}
+          onClick={handleSkip}
           className="text-sm text-[#432F2E]/60"
         >
           Skip

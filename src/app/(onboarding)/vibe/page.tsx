@@ -1,38 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
+import { readStore, subscribe, writeStore } from "@/lib/localStore";
+import {
+  DISCOVERY_VIBES,
+  ONBOARDING_COMPLETE_KEY,
+  parsePreferredVibes,
+  PREFERRED_VIBES_KEY,
+} from "@/lib/onboarding";
+
 export default function VibeSetupPage() {
   const router = useRouter();
-  const [selectedVibes, setSelectedVibes] = useState<string[]>([]);
-  const vibes = [
-    "Cozy",
-    "Aesthetic",
-    "Chill",
-    "Lively",
-    "Romantic",
-    "Upscale",
-    "Social",
-    "Quiet",
-    "Local",
-    "Fun",
-  ];
+  const savedVibes = useSyncExternalStore(
+    subscribe,
+    () => readStore(PREFERRED_VIBES_KEY) ?? "[]",
+    () => "[]",
+  );
+  const selectedVibes = useMemo(
+    () => parsePreferredVibes(savedVibes),
+    [savedVibes],
+  );
+  const vibes = DISCOVERY_VIBES;
   const toggleVibe = (vibe: string) => {
-    setSelectedVibes((current) =>
-      current.includes(vibe)
-        ? current.filter((item) => item !== vibe)
-        : [...current, vibe]
-    );
+    const next = selectedVibes.includes(vibe)
+      ? selectedVibes.filter((item) => item !== vibe)
+      : [...selectedVibes, vibe];
+    writeStore(PREFERRED_VIBES_KEY, JSON.stringify(next));
   };
   const handleContinue = () => {
-    router.push("/area-picker");
+    const onboardingComplete =
+      readStore(ONBOARDING_COMPLETE_KEY) === "true";
+    router.push(onboardingComplete ? "/profile" : "/area-picker");
   };
   return (
     <div className="min-h-screen bg-[#FCF1D0] text-brown flex flex-col px-6 py-8 max-w-md mx-auto">
       {/* Top */}
       <div className="flex items-center justify-between">
         <button
-          onClick={() => router.push("/onboarding/3")}
+          onClick={() =>
+            router.push(
+              readStore(ONBOARDING_COMPLETE_KEY) === "true"
+                ? "/profile"
+                : "/onboarding/3",
+            )
+          }
           className="text-xl"
         >
           ←
@@ -60,6 +72,10 @@ export default function VibeSetupPage() {
         <p className="mt-4 text-base leading-relaxed text-[#432F2E]/70">
           Pick a few vibes that sound like you. You can always change them
           later.
+        </p>
+        <p className="mt-2 text-sm text-[#432F2E]/60">
+          We&apos;ll use these to prioritise matching places. You can change or
+          clear them any time.
         </p>
       </div>
       {/* Vibes */}

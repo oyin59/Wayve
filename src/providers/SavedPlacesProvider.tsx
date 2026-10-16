@@ -11,10 +11,7 @@ import {
 import { readStore, subscribe, writeStore } from "@/lib/localStore";
 
 const STORAGE_KEY = "wayve:saved-place-ids";
-// What the React MVP showed before anything was saved
-// (Pink Bear, Café de vie, Nosta Coffee, Eli & Lulu's).
-const DEFAULT_SAVED_IDS = [1, 2, 5, 4];
-const DEFAULT_RAW = JSON.stringify(DEFAULT_SAVED_IDS);
+const DEFAULT_RAW = "[]";
 
 interface SavedPlacesContextValue {
   savedIds: number[];
@@ -31,7 +28,7 @@ function parseIds(raw: string): number[] {
     const parsed: unknown = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed.filter((n) => typeof n === "number") : [];
   } catch {
-    return DEFAULT_SAVED_IDS;
+    return [];
   }
 }
 

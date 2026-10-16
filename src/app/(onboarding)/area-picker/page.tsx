@@ -4,14 +4,36 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useArea } from "@/providers/AreaProvider";
 import { ABUJA_AREAS } from "@/lib/distance";
+import {
+  DISPLAY_NAME_KEY,
+  markOnboardingComplete,
+} from "@/lib/onboarding";
+import { writeStore } from "@/lib/localStore";
+
 export default function AreaPickerPage() {
   const router = useRouter();
   const { setArea } = useArea();
   const [selectedArea, setSelectedArea] = useState("");
+  const [displayName, setDisplayName] = useState("");
+
+  const finishOnboarding = () => {
+    if (displayName.trim()) {
+      writeStore(DISPLAY_NAME_KEY, displayName.trim());
+    }
+    markOnboardingComplete();
+  };
+
   const handleContinue = () => {
     setArea(selectedArea);
+    finishOnboarding();
     router.push("/discover");
   };
+
+  const handleSkip = () => {
+    finishOnboarding();
+    router.push("/discover");
+  };
+
   return (
     <div className="min-h-screen bg-[#FCF1D0] text-[#432F2E] flex flex-col px-6 py-8 max-w-md mx-auto">
       {/* Top */}
@@ -46,8 +68,30 @@ export default function AreaPickerPage() {
           Pick the area closest to you so we can show you places nearby.
         </p>
       </div>
+      <div className="mt-6">
+        <label
+          htmlFor="onboarding-display-name"
+          className="block text-sm font-semibold"
+        >
+          What should we call you?{" "}
+          <span className="font-normal text-brown/55">(optional)</span>
+        </label>
+        <input
+          id="onboarding-display-name"
+          type="text"
+          autoComplete="given-name"
+          maxLength={40}
+          value={displayName}
+          onChange={(event) => setDisplayName(event.target.value)}
+          placeholder="Your name"
+          className="mt-2 w-full rounded-xl border border-[#E6D56D] bg-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#8DBBD4]"
+        />
+        <p className="mt-1 text-xs text-brown/55">
+          Saved only in this browser. You can skip or change it later.
+        </p>
+      </div>
       {/* Area list */}
-      <div className="mt-8 flex-1 overflow-y-auto max-h-[55vh] pr-1">
+      <div className="mt-5 max-h-[40vh] flex-1 overflow-y-auto pr-1">
         <div className="grid grid-cols-2 gap-3">
           {ABUJA_AREAS.map((area) => {
             const selected = selectedArea === area;
@@ -75,6 +119,13 @@ export default function AreaPickerPage() {
       </div>
       {/* Continue */}
       <div className="pt-6">
+        <button
+          type="button"
+          onClick={handleSkip}
+          className="mb-3 w-full py-2 text-sm font-medium text-brown/65 underline"
+        >
+          Skip for now
+        </button>
         <button
           onClick={handleContinue}
           disabled={!selectedArea}

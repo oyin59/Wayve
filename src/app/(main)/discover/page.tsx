@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import PlaceImage from "../../../components/PlaceImage";
 import FilterPanel from "../../../components/FilterPanel";
@@ -13,6 +13,13 @@ import {
   ABUJA_AREAS,
 } from "../../../lib/distance";
 import { findMatches } from "../../../lib/matching";
+import { readStore, subscribe } from "../../../lib/localStore";
+import {
+  DISCOVERY_VIBES,
+  DISPLAY_NAME_KEY,
+  parsePreferredVibes,
+  PREFERRED_VIBES_KEY,
+} from "../../../lib/onboarding";
 
 export default function DiscoverPage() {
   const [showFilter, setShowFilter] = useState(false);
@@ -26,6 +33,20 @@ export default function DiscoverPage() {
   useState<"dining" | "cafes" | null>(null);
   const [filterPreferences, setFilterPreferences] =
     useState<FilterPreferences | null>(null);
+  const displayName = useSyncExternalStore(
+    subscribe,
+    () => readStore(DISPLAY_NAME_KEY) ?? "",
+    () => "",
+  );
+  const preferredVibesRaw = useSyncExternalStore(
+    subscribe,
+    () => readStore(PREFERRED_VIBES_KEY) ?? "[]",
+    () => "[]",
+  );
+  const preferredVibes = useMemo(
+    () => parsePreferredVibes(preferredVibesRaw),
+    [preferredVibesRaw],
+  );
 
   const router = useRouter();
   const { area: currentArea, setArea: setCurrentArea } = useArea();
@@ -78,7 +99,19 @@ export default function DiscoverPage() {
         ),
       }))
       .filter((place) => place.distance !== Infinity)
-      .sort((a, b) => a.distance - b.distance)
+      .sort((a, b) => {
+        const getPreferenceScore = (vibes: string[]) =>
+          vibes.filter((vibe) =>
+            preferredVibes.some(
+              (preference) =>
+                preference.toLowerCase() === vibe.toLowerCase(),
+            ),
+          ).length;
+
+        const preferenceDifference =
+          getPreferenceScore(b.vibe) - getPreferenceScore(a.vibe);
+        return preferenceDifference || a.distance - b.distance;
+      })
       .slice(0, limit);
   };
 
@@ -86,8 +119,21 @@ export default function DiscoverPage() {
     router.push(`/places/${place.id}`);
   };
 
+  const preferredPlaces = preferredVibes.length > 0
+    ? searchedPlaces.filter((place) =>
+        place.vibe.some((vibe) =>
+          preferredVibes.some(
+            (preference) =>
+              preference.toLowerCase() === vibe.toLowerCase(),
+          ),
+        ),
+      )
+    : [];
+  const surpriseCandidates =
+    preferredPlaces.length > 0 ? preferredPlaces : searchedPlaces;
+
   const handleSurpriseMe = () => {
-    const availablePlaces = searchedPlaces;
+    const availablePlaces = surpriseCandidates;
 
     if (availablePlaces.length === 0) {
       return;
@@ -102,7 +148,7 @@ export default function DiscoverPage() {
   };
 
   const handleTryAnother = () => {
-    const availablePlaces = searchedPlaces;
+    const availablePlaces = surpriseCandidates;
 
     if (availablePlaces.length === 0) {
       return;
@@ -335,6 +381,11 @@ export default function DiscoverPage() {
 
         {/* HERO */}
         <section className="px-6 pt-4">
+          {displayName && (
+            <p className="mb-2 text-sm font-semibold text-brown/65">
+              Hi, {displayName}!
+            </p>
+          )}
           <h2 className="font-serif text-5xl leading-tight">
             Find your
             <br />
@@ -403,7 +454,7 @@ export default function DiscoverPage() {
           </h3>
 
           <div className="flex gap-3 overflow-x-auto px-6 pb-2">
-            {["All", "Aesthetic", "Cozy", "Rooftop"].map((vibe) => (
+            {["All", ...DISCOVERY_VIBES].map((vibe) => (
               <button
                 key={vibe}
                 type="button"
@@ -539,7 +590,11 @@ export default function DiscoverPage() {
               <span>✨</span>
               <span className="text-brown/70">Based on your vibe:</span>
               <span className="truncate font-semibold text-[#8DBBD4]">
-                {activeVibe === "All" ? "Anything goes" : activeVibe}
+                {activeVibe !== "All"
+                  ? activeVibe
+                  : preferredVibes.length > 0
+                    ? preferredVibes.join(" · ")
+                    : "Anything goes"}
               </span>
             </div>
 

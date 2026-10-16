@@ -152,18 +152,7 @@ export default function PlaceDetail({ place }: PlaceDetailProps) {
             className="w-full bg-[#FFF0B5] text-[#432F2E] text-xs font-medium py-3 rounded-xl flex items-center justify-center gap-1.5 hover:opacity-95 transition-opacity border border-[#432F2E]/10"
           >
             <span>♡</span>
-            <span>Save to lists</span>
-          </button>
-
-          <button
-            onClick={() => router.push(`/places/${place.id}/review`)}
-            className="w-full bg-[#C4DAE8] text-[#432F2E] text-xs font-medium py-3 rounded-xl flex items-center justify-center gap-1.5 hover:opacity-95 transition-opacity"
-          >
-            <span>✍️</span>
-            <span>Write a review</span>
-          </button>
-          <button className="w-full bg-transparent border border-[#432F2E]/20 text-[#432F2E] text-xs font-medium py-3 rounded-xl flex items-center justify-center gap-1 hover:opacity-95 transition-opacity">
-            Share this spot
+            <span>Save place</span>
           </button>
         </div>
       </div>
