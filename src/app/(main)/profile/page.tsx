@@ -4,11 +4,7 @@ import { useState, useSyncExternalStore, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { ABUJA_AREAS } from "@/lib/distance";
 import { readStore, subscribe, writeStore } from "@/lib/localStore";
-import {
-  DISPLAY_NAME_KEY,
-  parsePreferredVibes,
-  PREFERRED_VIBES_KEY,
-} from "@/lib/onboarding";
+import { DISPLAY_NAME_KEY } from "@/lib/onboarding";
 import { useArea } from "@/providers/AreaProvider";
 import { useSavedPlaces } from "@/providers/SavedPlacesProvider";
 
@@ -21,13 +17,6 @@ export default function ProfilePage() {
     () => readStore(DISPLAY_NAME_KEY) ?? "",
     () => "",
   );
-  const preferredVibesRaw = useSyncExternalStore(
-    subscribe,
-    () => readStore(PREFERRED_VIBES_KEY) ?? "[]",
-    () => "[]",
-  );
-  const preferredVibes = parsePreferredVibes(preferredVibesRaw);
-
   const [editingName, setEditingName] = useState(false);
   const [nameDraft, setNameDraft] = useState("");
   const [showAreaPicker, setShowAreaPicker] = useState(false);
@@ -147,25 +136,6 @@ export default function ProfilePage() {
                 </span>
                 <span className="ml-3 text-sm font-medium">
                   {savedIds.length} <span aria-hidden="true">›</span>
-                </span>
-              </button>
-            </div>
-            <div className="border-t border-brown/10">
-              <button
-                type="button"
-                onClick={() => router.push("/vibe")}
-                className="flex w-full items-center justify-between p-4 text-left"
-              >
-                <span>
-                  <span className="block text-sm font-semibold">Vibe preferences</span>
-                  <span className="mt-1 block text-xs text-brown/55">
-                    {preferredVibes.length > 0
-                      ? preferredVibes.join(" · ")
-                      : "Choose vibes to prioritise in Discover"}
-                  </span>
-                </span>
-                <span className="ml-3 text-sm font-medium">
-                  Edit <span aria-hidden="true">›</span>
                 </span>
               </button>
             </div>

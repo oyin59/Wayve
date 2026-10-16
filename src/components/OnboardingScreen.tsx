@@ -79,7 +79,7 @@ const SLIDES: Slide[] = [
     ),
     body: "Your favourite spots, in one place.",
     button: "Get started",
-    next: "/vibe",
+    next: "/area-picker",
     art: (
       <div className="mt-10 h-[330px] rounded-[32px] overflow-hidden bg-[#2E1E1A] relative">
         <div className="absolute inset-0 flex items-center justify-center text-8xl">

@@ -14,7 +14,7 @@ export default function AreaPickerPage() {
   return (
     <div className="min-h-screen bg-[#FCF1D0] text-[#432F2E] flex flex-col px-6 py-8 max-w-md mx-auto">
       <div className="flex items-center justify-between">
-        <button onClick={() => router.push("/vibe")} className="text-xl">←</button>
+        <button onClick={() => router.push("/onboarding/3")} className="text-xl">←</button>
         <h1 className="text-2xl font-serif">Way<span className="italic text-[#8DBBD4]">ve</span></h1>
         <div className="w-5" />
       </div>

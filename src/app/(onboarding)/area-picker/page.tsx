@@ -39,7 +39,7 @@ export default function AreaPickerPage() {
       {/* Top */}
       <div className="flex items-center justify-between">
         <button
-          onClick={() => router.push("/vibe")}
+          onClick={() => router.push("/onboarding/3")}
           className="text-xl"
         >
           ←

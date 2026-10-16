@@ -17,8 +17,6 @@ import { readStore, subscribe } from "../../../lib/localStore";
 import {
   DISCOVERY_VIBES,
   DISPLAY_NAME_KEY,
-  parsePreferredVibes,
-  PREFERRED_VIBES_KEY,
 } from "../../../lib/onboarding";
 
 export default function DiscoverPage() {
@@ -29,8 +27,6 @@ export default function DiscoverPage() {
   const [surpriseSpot, setSurpriseSpot] = useState<Place | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeVibe, setActiveVibe] = useState("All");
-  const [expandedCategory, setExpandedCategory] =
-  useState<"dining" | "cafes" | null>(null);
   const [filterPreferences, setFilterPreferences] =
     useState<FilterPreferences | null>(null);
   const displayName = useSyncExternalStore(
@@ -38,16 +34,6 @@ export default function DiscoverPage() {
     () => readStore(DISPLAY_NAME_KEY) ?? "",
     () => "",
   );
-  const preferredVibesRaw = useSyncExternalStore(
-    subscribe,
-    () => readStore(PREFERRED_VIBES_KEY) ?? "[]",
-    () => "[]",
-  );
-  const preferredVibes = useMemo(
-    () => parsePreferredVibes(preferredVibesRaw),
-    [preferredVibesRaw],
-  );
-
   const router = useRouter();
   const { area: currentArea, setArea: setCurrentArea } = useArea();
 
@@ -60,7 +46,7 @@ export default function DiscoverPage() {
     return findMatches(filterPreferences, currentArea);
   }, [filterPreferences, currentArea]);
 
-  // Apply the search field and quick-vibe selection.
+  // Search and detailed filters apply to the full catalogue.
   const searchedPlaces = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
 
@@ -74,23 +60,27 @@ export default function DiscoverPage() {
           vibe.toLowerCase().includes(query)
         );
 
-      const matchesVibe =
-        activeVibe === "All" ||
-        place.vibe?.some((vibe) =>
-          vibe.toLowerCase().includes(activeVibe.toLowerCase())
-        );
-
-      return matchesSearch && matchesVibe;
+      return matchesSearch;
     });
-  }, [filteredPlaces, searchQuery, activeVibe]);
+  }, [filteredPlaces, searchQuery]);
 
-  // Calculate nearby places, using the current filtered list.
+  // Quick vibes filter only the two category carousels.
   const getNearbyPlaces = (
     categoryFilter: string[],
-    limit = 5
+    limit = 5,
+    applyQuickVibe = false,
   ) => {
     return searchedPlaces
-      .filter((place) => categoryFilter.includes(place.category))
+      .filter((place) => {
+        const matchesCategory = categoryFilter.includes(place.category);
+        const matchesVibe =
+          !applyQuickVibe ||
+          activeVibe === "All" ||
+          place.vibe?.some(
+            (vibe) => vibe.toLowerCase() === activeVibe.toLowerCase(),
+          );
+        return matchesCategory && matchesVibe;
+      })
       .map((place) => ({
         ...place,
         distance: getDistanceBetween(
@@ -99,19 +89,7 @@ export default function DiscoverPage() {
         ),
       }))
       .filter((place) => place.distance !== Infinity)
-      .sort((a, b) => {
-        const getPreferenceScore = (vibes: string[]) =>
-          vibes.filter((vibe) =>
-            preferredVibes.some(
-              (preference) =>
-                preference.toLowerCase() === vibe.toLowerCase(),
-            ),
-          ).length;
-
-        const preferenceDifference =
-          getPreferenceScore(b.vibe) - getPreferenceScore(a.vibe);
-        return preferenceDifference || a.distance - b.distance;
-      })
+      .sort((a, b) => a.distance - b.distance)
       .slice(0, limit);
   };
 
@@ -119,18 +97,16 @@ export default function DiscoverPage() {
     router.push(`/places/${place.id}`);
   };
 
-  const preferredPlaces = preferredVibes.length > 0
-    ? searchedPlaces.filter((place) =>
-        place.vibe.some((vibe) =>
-          preferredVibes.some(
-            (preference) =>
-              preference.toLowerCase() === vibe.toLowerCase(),
-          ),
-        ),
-      )
-    : [];
-  const surpriseCandidates =
-    preferredPlaces.length > 0 ? preferredPlaces : searchedPlaces;
+  const openMorePlaces = (
+    category: "dining" | "cafes",
+    vibe = activeVibe,
+  ) => {
+    router.push(
+      `/discover/more/${category}/${encodeURIComponent(vibe === "All" ? "all" : vibe)}`,
+    );
+  };
+
+  const surpriseCandidates = searchedPlaces;
 
   const handleSurpriseMe = () => {
     const availablePlaces = surpriseCandidates;
@@ -179,19 +155,20 @@ export default function DiscoverPage() {
 
   const dinnerSpots = getNearbyPlaces(
     ["Dining", "Global", "Social"],
-    5
+    5,
+    true,
   );
 
   const dessertAndCafes = getNearbyPlaces(
     ["Sweets", "Café"],
-    5
+    5,
+    true,
   );
 
   const wayvePicks = places.filter((place) => place.known).slice(0, 4);
 
   const isFiltering =
     searchQuery.trim() !== "" ||
-    activeVibe !== "All" ||
     filterPreferences !== null;
 
   return (
@@ -462,11 +439,14 @@ export default function DiscoverPage() {
                 {vibe === "All" && "✨ "}
                 {vibe === "Aesthetic" && "✨ "}
                 {vibe === "Cozy" && "🕯 "}
-                {vibe === "Rooftop" && "🌆 "}
                 {vibe}
               </button>
             ))}
           </div>
+          <p className="px-6 pt-1 text-xs text-brown/60">
+            Quick vibes filter Dining &amp; Social and Cafés &amp; Desserts.
+            Perfect for you stays unchanged.
+          </p>
         </section>
 
         {/* MORE FILTERS */}
@@ -497,8 +477,6 @@ export default function DiscoverPage() {
                 <h3 className="font-serif text-2xl font-semibold">
                   {searchQuery.trim()
                     ? "Search results"
-                    : activeVibe !== "All"
-                    ? `${activeVibe} spots`
                     : "Your matches"}
                 </h3>
                 <p className="mt-1 text-sm text-brown/65">
@@ -576,27 +554,6 @@ export default function DiscoverPage() {
         
         {!isFiltering && (
           <>
-        {/* BASED ON YOUR VIBE */}
-        <section className="mt-4 px-6">
-          <div className="flex items-center justify-between rounded-2xl border border-[#E6D56D]/60 bg-white/60 px-4 py-3 text-sm">
-            <div className="flex min-w-0 items-center gap-2">
-              <span>✨</span>
-              <span className="text-brown/70">Based on your vibe:</span>
-              <span className="truncate font-semibold text-[#8DBBD4]">
-                {activeVibe !== "All"
-                  ? activeVibe
-                  : preferredVibes.length > 0
-                    ? preferredVibes.join(" · ")
-                    : "Anything goes"}
-              </span>
-            </div>
-
-            <span className="shrink-0 text-xs text-brown/50">
-              {searchedPlaces.length} spots
-            </span>
-          </div>
-        </section>
-
         {/* WAYVE PICKS */}
         <section className="mt-4 px-6">
           <button
@@ -735,28 +692,6 @@ export default function DiscoverPage() {
             })}
           </div>
 
-          {expandedCategory === "dining" && (
-            <div className="mt-5 px-6">
-              <div className="mb-4 flex items-center justify-between">
-                <h4 className="font-serif text-xl font-semibold">All Dining &amp; Social</h4>
-                <button type="button" onClick={() => setExpandedCategory(null)} className="text-sm text-[#8DBBD4] underline">Close</button>
-              </div>
-              {(() => {
-                const categoryPlaces = searchedPlaces.filter((place) => ["Dining", "Global", "Social"].includes(place.category));
-                return categoryPlaces.length ? (
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    {categoryPlaces.map((place) => (
-                      <button type="button" key={place.id} onClick={() => handlePlaceClick(place)} className="flex items-center gap-3 rounded-2xl border border-[#E6D56D] bg-white p-3 text-left shadow-sm">
-                        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#FFF0B5]"><PlaceImage src={place.image} alt={place.name} className="object-cover" /></div>
-                        <div className="min-w-0 flex-1"><h4 className="truncate font-serif text-lg font-semibold">{place.name}</h4><p className="mt-1 truncate text-xs text-brown/65">{place.category} · {place.neighbourhood}</p><p className="mt-2 text-xs">{place.priceTier}</p></div>
-                        <span className="text-lg text-[#8DBBD4]">→</span>
-                      </button>
-                    ))}
-                  </div>
-                ) : <p className="rounded-2xl bg-white/70 p-6 text-center text-sm">No places in this section yet.</p>;
-              })()}
-            </div>
-          )}
         </section>
 
         {/* DINING & SOCIAL */}
@@ -768,7 +703,7 @@ export default function DiscoverPage() {
 
             <button
               type="button"
-              onClick={() => setExpandedCategory("dining")}
+              onClick={() => openMorePlaces("dining")}
               className="text-sm font-medium text-[#8DBBD4]"
             >
               See all →
@@ -776,7 +711,21 @@ export default function DiscoverPage() {
           </div>
 
           <div className="no-scrollbar flex gap-4 overflow-x-auto px-6 pb-2">
-            {dinnerSpots.map((place) => {
+            {dinnerSpots.length === 0 ? (
+              <div className="min-w-full rounded-2xl border border-[#E6D56D] bg-white/70 p-5 text-sm">
+                <p>
+                  No {activeVibe === "All" ? "" : `${activeVibe} `}
+                  dining or social spots found nearby.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => openMorePlaces("dining", "All")}
+                  className="mt-3 font-medium text-[#8DBBD4] underline"
+                >
+                  Browse all Dining &amp; Social →
+                </button>
+              </div>
+            ) : dinnerSpots.map((place) => {
               const distance =
                 place.distance !== Infinity
                   ? `${place.distance}km`
@@ -833,28 +782,6 @@ export default function DiscoverPage() {
             })}
           </div>
 
-          {expandedCategory === "cafes" && (
-            <div className="mt-5 px-6">
-              <div className="mb-4 flex items-center justify-between">
-                <h4 className="font-serif text-xl font-semibold">All Cafés &amp; Desserts</h4>
-                <button type="button" onClick={() => setExpandedCategory(null)} className="text-sm text-[#8DBBD4] underline">Close</button>
-              </div>
-              {(() => {
-                const categoryPlaces = searchedPlaces.filter((place) => ["Café", "Sweets"].includes(place.category));
-                return categoryPlaces.length ? (
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    {categoryPlaces.map((place) => (
-                      <button type="button" key={place.id} onClick={() => handlePlaceClick(place)} className="flex items-center gap-3 rounded-2xl border border-[#E6D56D] bg-white p-3 text-left shadow-sm">
-                        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#FFF0B5]"><PlaceImage src={place.image} alt={place.name} className="object-cover" /></div>
-                        <div className="min-w-0 flex-1"><h4 className="truncate font-serif text-lg font-semibold">{place.name}</h4><p className="mt-1 truncate text-xs text-brown/65">{place.category} · {place.neighbourhood}</p><p className="mt-2 text-xs">{place.priceTier}</p></div>
-                        <span className="text-lg text-[#8DBBD4]">→</span>
-                      </button>
-                    ))}
-                  </div>
-                ) : <p className="rounded-2xl bg-white/70 p-6 text-center text-sm">No places in this section yet.</p>;
-              })()}
-            </div>
-          )}
         </section>
 
         {/* CAFÉS & DESSERTS */}
@@ -866,7 +793,7 @@ export default function DiscoverPage() {
 
             <button
               type="button"
-              onClick={() => setExpandedCategory("cafes")}
+              onClick={() => openMorePlaces("cafes")}
               className="text-sm font-medium text-[#8DBBD4]"
             >
               See all →
@@ -874,7 +801,21 @@ export default function DiscoverPage() {
           </div>
 
           <div className="no-scrollbar flex gap-4 overflow-x-auto px-6 pb-2">
-            {dessertAndCafes.map((place) => {
+            {dessertAndCafes.length === 0 ? (
+              <div className="min-w-full rounded-2xl border border-[#E6D56D] bg-white/70 p-5 text-sm">
+                <p>
+                  No {activeVibe === "All" ? "" : `${activeVibe} `}
+                  cafés or desserts found nearby.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => openMorePlaces("cafes", "All")}
+                  className="mt-3 font-medium text-[#8DBBD4] underline"
+                >
+                  Browse all Cafés &amp; Desserts →
+                </button>
+              </div>
+            ) : dessertAndCafes.map((place) => {
               const distance =
                 place.distance !== Infinity
                   ? `${place.distance}km`
