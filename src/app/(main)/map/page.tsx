@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import PlaceImage from "@/components/PlaceImage";
-import { ABUJA_AREAS } from "@/lib/distance";
+import { ABUJA_AREAS, formatAreaDistance } from "@/lib/distance";
 import { placesNear } from "@/lib/matching";
 import { useArea } from "@/providers/AreaProvider";
 import type { PlaceWithDistance } from "@/types/place";
@@ -21,7 +21,7 @@ export default function MapPage() {
     router.push(`/places/${place.id}`);
   };
   return (
-    <div className="min-h-screen bg-[#FCF1D0] text-brown pb-24">
+    <div className="min-h-screen bg-[#FAF7F2] text-brown pb-24">
       {/* Header */}
       <header className="px-5 pt-8 pb-4 max-w-md mx-auto">
         <div className="flex items-center justify-between">
@@ -55,13 +55,16 @@ export default function MapPage() {
             🔍
           </span>
           <span className="text-sm text-brown/50">
-            Search this area
+            Browse places in this area
           </span>
         </button>
       </div>
       {/* Map Area */}
       <section className="px-5 mt-5 max-w-md mx-auto">
-        <div className="relative h-[420px] rounded-[2rem] overflow-hidden bg-[#E8E1D2] border border-[#E6D56D] shadow-sm">
+        <div className="relative h-[420px] rounded-[2rem] overflow-hidden bg-[#F1E8E3] border border-[#29291F]/15 shadow-sm">
+          <p className="absolute bottom-2 left-2 right-2 z-20 rounded-lg bg-white/90 px-3 py-2 text-center text-xs text-brown/70">
+            Illustrative map · pins aren&apos;t exact locations.
+          </p>
           {/* Fake map background */}
           <div className="absolute inset-0">
             {/* Roads */}
@@ -122,8 +125,8 @@ export default function MapPage() {
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg border-2 ${
                     isSelected
-                      ? "bg-[#C4DAE8] border-brown"
-                      : "bg-white border-[#E6D56D]"
+                      ? "bg-[#303820] border-brown"
+                      : "bg-white border-[#29291F]/15"
                   }`}
                 >
                   📍
@@ -145,7 +148,9 @@ export default function MapPage() {
                   <p className="text-sm text-brown/60 mt-1">
                     {selectedPlace.neighbourhood}
                     {" · "}
-                    {selectedPlace.distance}km
+                    {selectedPlace.distance === 0
+                      ? `In ${selectedPlace.neighbourhood}`
+                      : formatAreaDistance(selectedPlace.distance)}
                   </p>
                 </div>
                 <button
@@ -188,16 +193,12 @@ export default function MapPage() {
               className="w-full bg-white rounded-2xl p-4 flex items-center gap-3 text-left shadow-sm hover:shadow-md transition"
             >
               {/* Image */}
-              <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-[#E8E1D2] shrink-0">
+              <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-[#F1E8E3] shrink-0">
                 <PlaceImage
                   src={place.image}
                   alt={place.name}
+                  category={place.category}
                   sizes="64px"
-                  fallback={
-                    <div className="absolute inset-0 flex items-center justify-center text-xl">
-                      📍
-                    </div>
-                  }
                 />
               </div>
               {/* Information */}
@@ -215,7 +216,9 @@ export default function MapPage() {
               {/* Distance */}
               <div className="text-right shrink-0">
                 <p className="text-sm font-semibold">
-                  {place.distance}km
+                  {place.distance === 0
+                    ? `In ${place.neighbourhood}`
+                    : formatAreaDistance(place.distance)}
                 </p>
                 <p className="text-[10px] text-brown/40">
                   away
@@ -267,8 +270,8 @@ export default function MapPage() {
                     }}
                     className={`w-full text-left px-4 py-3 rounded-xl transition ${
                       selected
-                        ? "bg-[#C4DAE8] font-semibold"
-                        : "bg-[#FCF1D0] hover:bg-[#F8E8A5]"
+                        ? "bg-[#303820] font-semibold"
+                        : "bg-[#F1E8E3] hover:bg-[#EE858B]"
                     }`}
                   >
                     <div className="flex items-center justify-between">

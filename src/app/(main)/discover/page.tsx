@@ -10,6 +10,7 @@ import { useArea } from "../../../providers/AreaProvider";
 import type { Place, FilterPreferences } from "../../../types/place";
 import {
   getDistanceBetween,
+  formatPlaceProximity,
   ABUJA_AREAS,
 } from "../../../lib/distance";
 import { findMatches } from "../../../lib/matching";
@@ -23,7 +24,6 @@ export default function DiscoverPage() {
   const [showFilter, setShowFilter] = useState(false);
   const [showLocationPicker, setShowLocationPicker] = useState(false);
   const [showSurpriseModal, setShowSurpriseModal] = useState(false);
-  const [showWayvePicks, setShowWayvePicks] = useState(false);
   const [surpriseSpot, setSurpriseSpot] = useState<Place | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeVibe, setActiveVibe] = useState("All");
@@ -165,8 +165,6 @@ export default function DiscoverPage() {
     true,
   );
 
-  const wayvePicks = places.filter((place) => place.known).slice(0, 4);
-
   const isFiltering =
     searchQuery.trim() !== "" ||
     filterPreferences !== null;
@@ -205,7 +203,7 @@ export default function DiscoverPage() {
             </div>
 
             <p className="mb-3 text-xs text-brown/70">
-              Distances will calculate from your selected area across Abuja.
+              Used to show places near your area.
             </p>
 
             <div className="grid grid-cols-2 gap-2 overflow-y-auto pr-1">
@@ -220,7 +218,7 @@ export default function DiscoverPage() {
                   className={`rounded-2xl border p-2.5 text-left text-xs transition-all ${
                     currentArea === area
                       ? "border-brown bg-brown font-semibold text-white"
-                      : "border-[#E6D56D] bg-[#FCF1D0]/30 text-brown hover:bg-[#FCF1D0]"
+                      : "border-[#29291F]/15 bg-[#F1E8E3]/30 text-brown hover:bg-[#F1E8E3]"
                   }`}
                 >
                   📍 {area}
@@ -234,12 +232,12 @@ export default function DiscoverPage() {
       {/* SURPRISE ME MODAL */}
       {showSurpriseModal && surpriseSpot && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm">
-          <div className="w-full max-w-md animate-in slide-in-from-bottom rounded-t-4xl bg-[#FCF1D0] p-6 shadow-2xl duration-300">
+          <div className="w-full max-w-md animate-in slide-in-from-bottom rounded-t-4xl bg-[#F1E8E3] p-6 shadow-2xl duration-300">
             <button
               type="button"
               aria-label="Close surprise spot"
               onClick={() => setShowSurpriseModal(false)}
-              className="mx-auto mb-4 block h-1.5 w-12 rounded-full bg-[#E6D56D]"
+              className="mx-auto mb-4 block h-1.5 w-12 rounded-full bg-[#303820]"
             />
 
             <div className="mb-4 text-center">
@@ -248,7 +246,7 @@ export default function DiscoverPage() {
               </p>
             </div>
 
-            <div className="relative mb-6 flex min-h-65 flex-col justify-end overflow-hidden rounded-3xl bg-[#2E1E1A] p-6 text-white shadow-lg">
+            <div className="relative mb-6 flex min-h-65 flex-col justify-end overflow-hidden rounded-3xl bg-[#29291F] p-6 text-white shadow-lg">
               {surpriseSpot.image ? (
                 <PlaceImage
                   src={surpriseSpot.image}
@@ -283,9 +281,11 @@ export default function DiscoverPage() {
                     </span>
                   ))}
 
-                  <span className="rounded-full border border-emerald-500/30 bg-emerald-900/80 px-3 py-1 text-xs text-emerald-200">
-                    {surpriseSpot.status ?? "Place"}
-                  </span>
+                  {surpriseSpot.status === "Unverified" && (
+                    <span className="rounded-full bg-amber-100 px-3 py-1 text-xs text-amber-900">
+                      Not verified by Wayve
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -294,7 +294,7 @@ export default function DiscoverPage() {
               <button
                 type="button"
                 onClick={handleTryAnother}
-                className="flex items-center justify-center gap-2 rounded-2xl border border-[#E6D56D] bg-[#FFF0B5] py-3.5 text-sm font-bold text-brown transition-transform active:scale-95"
+                className="flex items-center justify-center gap-2 rounded-2xl border border-[#29291F]/15 bg-[#EE858B] py-3.5 text-sm font-bold text-brown transition-transform active:scale-95"
               >
                 🔄 Try another
               </button>
@@ -315,11 +315,12 @@ export default function DiscoverPage() {
       )}
 
       {/* MAIN PAGE */}
-      <div className="min-h-screen bg-[#FCF1D0] pb-24 text-brown">
+      <div className="min-h-screen bg-[#FAF7F2] pb-24 text-brown md:pb-32">
+        <div className="mx-auto w-full max-w-[90rem]">
         {/* HEADER */}
-        <header className="flex items-center justify-between px-6 py-4">
+        <header className="flex items-center justify-between px-6 py-4 lg:px-12 lg:py-6">
           <h1 className="font-serif text-3xl">
-            Way<span className="italic text-[#8DBBD4]">ve</span>
+            Way<span className="italic text-[#EE858B]">ve</span>
           </h1>
 
           <div className="flex items-center gap-2">
@@ -332,63 +333,57 @@ export default function DiscoverPage() {
                 searchInput?.focus();
               }}
               aria-label="Focus search"
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#FFF0B5]"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EE858B]"
             >
               🔍
             </button>
 
             <button
               type="button"
-              aria-label="Notifications"
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#FFF0B5]"
-            >
-              🔔
-            </button>
-
-            <button
-              type="button"
               onClick={() => setShowLocationPicker(true)}
-              className="flex max-w-35 items-center gap-1 truncate rounded-full border border-[#E6D56D] bg-white px-3.5 py-2 text-xs font-medium shadow-sm transition-all hover:border-brown"
+              className="flex max-w-35 items-center gap-1 truncate rounded-full border border-[#29291F]/15 bg-white px-3.5 py-2 text-xs font-medium shadow-sm transition-all hover:border-brown"
             >
               <span className="truncate">📍 {currentArea}</span>
               <span className="text-[10px]">⌄</span>
             </button>
           </div>
         </header>
-
         {/* HERO */}
-        <section className="px-6 pt-4">
-          {displayName && (
-            <p className="mb-2 text-sm font-semibold text-brown/65">
-              Hi, {displayName}!
-            </p>
-          )}
-          <h2 className="font-serif text-5xl leading-tight">
-            Find your
-            <br />
-            <span className="italic text-[#8DBBD4]">next</span> spot
-          </h2>
+        <section className="mx-4 mt-1 rounded-[1.75rem] px-1 py-2 lg:mx-12 lg:mt-3 lg:bg-white/65 lg:px-10 lg:py-9 lg:shadow-sm">
+          <div className="lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-12">
+            <div>
+              <p className="mb-2 text-xl font-bold tracking-tight text-brown sm:text-2xl">
+                Hey, {displayName || "there"} 👋
+              </p>
+              <h2 className="font-serif text-4xl leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
+                Find your
+                <br className="lg:hidden" />
+                <span className="italic text-[#EE858B]">next</span> spot
+              </h2>
+            </div>
 
-          <p className="mt-2 text-lg text-brown/80">
-            Tell us the vibe. We&apos;ll show you where to go in Abuja.
-          </p>
+            <div className="lg:max-w-lg">
+              <p className="mt-2 max-w-sm text-sm text-brown/75 sm:text-base lg:mt-0 lg:text-lg">
+                Tell us the vibe. We&apos;ll show you where to go in Abuja.
+              </p>
 
-          <div className="mt-5 flex gap-3">
-            <button
-              type="button"
-              onClick={handleSurpriseMe}
-              disabled={searchedPlaces.length === 0}
-              className="rounded-full bg-brown px-5 py-3 font-medium text-white shadow-sm transition-transform active:scale-95 disabled:opacity-50"
-            >
-              🎲 Surprise me
-            </button>
-
+              <div className="mt-3 flex gap-3">
+                <button
+                  type="button"
+                  onClick={handleSurpriseMe}
+                  disabled={searchedPlaces.length === 0}
+                  className="rounded-xl bg-[#303820] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-transform active:scale-95 disabled:opacity-50"
+                >
+                  🎲 Surprise me
+                </button>
+              </div>
+            </div>
           </div>
         </section>
 
         {/* SEARCH BAR */}
-        <section className="mt-6 px-6">
-          <div className="flex items-center gap-3 rounded-2xl border border-[#E6D56D] bg-white px-4 py-4 shadow-sm">
+        <section className="mt-3 px-6 lg:px-12">
+          <div className="flex items-center gap-3 rounded-2xl border border-[#29291F]/12 bg-white px-4 py-4 shadow-sm">
             <span className="text-xl text-brown/60">⌕</span>
 
             <input
@@ -397,7 +392,7 @@ export default function DiscoverPage() {
               onChange={(event) => setSearchQuery(event.target.value)}
               placeholder={`Search places around ${currentArea}...`}
               aria-label="Search places"
-              className="min-w-0 flex-1 bg-transparent text-sm text-brown outline-none placeholder:text-[#967F78] md:text-base"
+              className="min-w-0 flex-1 bg-transparent text-sm text-brown outline-none placeholder:text-[#29291F] md:text-base"
             />
 
             {searchQuery && (
@@ -411,19 +406,16 @@ export default function DiscoverPage() {
               </button>
             )}
 
-            <span className="shrink-0 rounded-full bg-[#F1F7FA] px-3 py-1 text-xs font-semibold text-[#8DBBD4]">
-              AI ✦
-            </span>
           </div>
         </section>
 
         {/* QUICK VIBES */}
-        <section className="mt-7">
-          <h3 className="mb-3 px-6 text-lg font-medium">
-            Quick vibes
+        <section className="mt-5 lg:mt-8">
+          <h3 className="mb-3 px-6 text-lg font-medium lg:px-12 lg:text-xl">
+            What&apos;s the vibe?
           </h3>
 
-          <div className="flex gap-3 overflow-x-auto px-6 pb-2">
+          <div className="no-scrollbar flex touch-pan-x gap-3 overflow-x-auto px-6 pb-2 lg:flex-wrap lg:overflow-visible lg:px-12">
             {["All", ...DISCOVERY_VIBES].map((vibe) => (
               <button
                 key={vibe}
@@ -433,7 +425,7 @@ export default function DiscoverPage() {
                 className={`whitespace-nowrap rounded-full border px-5 py-3 text-sm transition ${
                   activeVibe === vibe
                     ? "border-brown bg-brown text-white"
-                    : "border-[#E6D56D] bg-white text-brown"
+                    : "border-[#29291F]/15 bg-white text-brown"
                 }`}
               >
                 {vibe === "All" && "✨ "}
@@ -443,24 +435,24 @@ export default function DiscoverPage() {
               </button>
             ))}
           </div>
-          <p className="px-6 pt-1 text-xs text-brown/60">
+          <p className="px-6 pt-1 text-xs text-brown/75 lg:px-12">
             Quick vibes filter Dining &amp; Social and Cafés &amp; Desserts.
             Perfect for you stays unchanged.
           </p>
         </section>
 
         {/* MORE FILTERS */}
-        <section className="mt-5 px-6">
+        <section className="mt-5 px-6 lg:px-12">
           <button
             type="button"
             onClick={() => setShowFilter(true)}
-            className="flex w-full items-center justify-between rounded-2xl border border-[#E6D56D] bg-white px-5 py-4 font-medium text-brown"
+            className="flex w-full items-center justify-between rounded-2xl border border-[#29291F]/15 bg-white px-5 py-4 font-medium text-brown"
           >
             <span className="flex items-center gap-2">
               <span className="text-lg">☷</span>
               More filters
               {filterPreferences && (
-                <span className="rounded-full bg-[#F1F7FA] px-2 py-0.5 text-xs text-brown">
+                <span className="rounded-full bg-[#F1E8E3] px-2 py-0.5 text-xs text-brown">
                   Applied
                 </span>
               )}
@@ -471,7 +463,7 @@ export default function DiscoverPage() {
 
         {/* FILTERED SEARCH RESULTS */}
         {isFiltering && (
-          <section className="mt-6 px-6">
+          <section className="mx-auto mt-6 px-6 lg:px-12">
             <div className="mb-4 flex items-start justify-between gap-3">
               <div>
                 <h3 className="font-serif text-2xl font-semibold">
@@ -488,31 +480,27 @@ export default function DiscoverPage() {
               <button
                 type="button"
                 onClick={handleClearFilters}
-                className="shrink-0 pt-1 text-sm font-medium text-[#8DBBD4] underline"
+                className="shrink-0 pt-1 text-sm font-medium text-[#29291F] underline"
               >
                 Clear
               </button>
             </div>
 
             {searchedPlaces.length > 0 ? (
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
                 {searchedPlaces.map((place) => (
                   <button
                     type="button"
                     key={place.id}
                     onClick={() => handlePlaceClick(place)}
-                    className="flex items-center gap-3 rounded-2xl border border-[#E6D56D] bg-white p-3 text-left shadow-sm transition hover:bg-[#FFF9E8]"
+                    className="wayve-card flex items-center gap-3 p-3 text-left transition hover:bg-[#FAF7F2]"
                   >
-                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#FFF0B5]">
+                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#EE858B]">
                       <PlaceImage
                         src={place.image}
                         alt={place.name}
+                        category={place.category}
                         className="object-cover"
-                        fallback={
-                          <span className="flex h-full items-center justify-center text-2xl">
-                            📍
-                          </span>
-                        }
                       />
                     </div>
 
@@ -520,7 +508,7 @@ export default function DiscoverPage() {
                       <h4 className="truncate font-serif text-lg font-semibold">
                         {place.name}
                       </h4>
-                      <p className="mt-0.5 truncate text-xs text-brown/65">
+                      <p className="mt-0.5 truncate text-[13px] text-brown/80">
                         {place.category} · {place.neighbourhood}
                       </p>
                       <p className="mt-2 text-xs text-brown/80">
@@ -528,17 +516,17 @@ export default function DiscoverPage() {
                       </p>
                     </div>
 
-                    <span className="text-lg text-[#8DBBD4]">→</span>
+                    <span className="text-lg text-[#29291F]">→</span>
                   </button>
                 ))}
               </div>
             ) : (
-              <div className="rounded-2xl border border-[#E6D56D] bg-white/70 p-6 text-center">
+              <div className="rounded-3xl border border-[#29291F]/15 bg-white/80 p-6 text-center">
                 <p className="font-serif text-xl font-semibold">
                   No spots found just yet
                 </p>
                 <p className="mt-2 text-sm text-brown/70">
-                  Try another vibe, change your search, or clear your filters.
+                  Try a different search, broaden your filters, or clear them.
                 </p>
                 <button
                   type="button"
@@ -554,100 +542,29 @@ export default function DiscoverPage() {
         
         {!isFiltering && (
           <>
-        {/* WAYVE PICKS */}
-        <section className="mt-4 px-6">
-          <button
-            type="button"
-            aria-expanded={showWayvePicks}
-            onClick={() => setShowWayvePicks((isOpen) => !isOpen)}
-            className="flex w-full items-center justify-between rounded-3xl bg-[#2E1E1A] p-5 text-left text-white shadow-md"
-          >
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10 text-2xl">
-                📰
-              </div>
-
-              <div>
-                <p className="text-[11px] font-semibold uppercase tracking-widest text-white/70">
-                  Staff favorites · Editor&apos;s choice
-                </p>
-                <h4 className="mt-0.5 font-serif text-lg font-bold">
-                  This week&apos;s hand-picked Abuja spots
-                </h4>
-                <p className="mt-0.5 text-xs text-white/60">
-                  Selected by real people on the Wayve team
-                </p>
-              </div>
-            </div>
-
-            <span className="text-lg text-white/50">{showWayvePicks ? "⌃" : "›"}</span>
-          </button>
-
-          {showWayvePicks && (
-            <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {wayvePicks.length > 0 ? (
-                wayvePicks.map((place) => (
-                  <button
-                    type="button"
-                    key={place.id}
-                    onClick={() => handlePlaceClick(place)}
-                    className="flex items-center gap-3 rounded-2xl border border-[#E6D56D] bg-white p-3 text-left shadow-sm transition hover:bg-[#FFF9E8]"
-                  >
-                    <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-[#FFF0B5]">
-                      <PlaceImage
-                        src={place.image}
-                        alt={place.name}
-                        className="object-cover"
-                        fallback={
-                          <span className="flex h-full items-center justify-center text-2xl">
-                            📍
-                          </span>
-                        }
-                      />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h4 className="truncate font-serif text-lg font-semibold">
-                        {place.name}
-                      </h4>
-                      <p className="truncate text-xs text-brown/65">
-                        {place.category} · {place.neighbourhood}
-                      </p>
-                    </div>
-                    <span className="text-lg text-[#8DBBD4]">→</span>
-                  </button>
-                ))
-              ) : (
-                <p className="rounded-2xl bg-white/70 p-4 text-sm text-brown/70">
-                  No featured spots are available yet.
-                </p>
-              )}
-            </div>
-          )}
-        </section>
-
         {/* PERFECT FOR YOU */}
-        <section className="mt-8">
-          <div className="mb-4 flex items-center justify-between px-6">
+        <section className="mt-8 lg:mt-12">
+          <div className="mb-4 flex items-center justify-between px-6 lg:px-12">
             <h3 className="flex items-center gap-2 font-serif text-2xl font-semibold">
               ✨ Perfect for you
             </h3>
           </div>
 
-          <div className="no-scrollbar flex gap-4 overflow-x-auto px-6 pb-2">
+          <div className="no-scrollbar flex gap-4 overflow-x-auto px-6 pb-2 lg:grid lg:grid-cols-2 lg:overflow-visible lg:px-12 xl:grid-cols-4">
             {perfectForYou.map((place) => {
               const distance =
                 place.distance !== Infinity
-                  ? `${place.distance}km`
+                  ? formatPlaceProximity(place.distance, place.neighbourhood)
                   : null;
 
               return (
                 <div
                   key={place.id}
                   onClick={() => handlePlaceClick(place)}
-                  className="relative flex min-h-65 min-w-70 max-w-70 cursor-pointer flex-col justify-between rounded-3xl bg-[#2E1E1A] p-5 text-white shadow-md"
+                  className="relative flex min-h-60 min-w-70 max-w-70 cursor-pointer flex-col justify-between rounded-3xl border border-[#29291F]/15 bg-white p-5 text-[#29291F] shadow-sm transition hover:shadow-md lg:min-w-0 lg:max-w-none"
                 >
                   <div className="mb-10 flex items-start justify-between">
-                    <span className="rounded-full bg-white/20 px-3 py-1 text-xs font-semibold tracking-wider backdrop-blur-md">
+                    <span className="rounded-full bg-[#F1E8E3] px-3 py-1 text-xs font-semibold tracking-wider">
                       {place.priceTier === "Budget"
                         ? "₦"
                         : place.priceTier === "Splurge"
@@ -655,7 +572,7 @@ export default function DiscoverPage() {
                         : "₦₦"}
                     </span>
 
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 text-xs backdrop-blur-md">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#EE858B]/70 text-xs">
                       📍
                     </span>
                   </div>
@@ -665,12 +582,14 @@ export default function DiscoverPage() {
                       {place.name}
                     </h4>
 
-                    <p className="mt-0.5 text-xs font-medium text-amber-300/90">
-                      📍 {place.neighbourhood}
-                      {distance ? ` · ${distance}` : ""}
+                    <p className="mt-0.5 text-xs font-medium text-brown/75">
+                      📍{" "}
+                      {place.distance === 0
+                        ? distance
+                        : `${place.neighbourhood}${distance ? ` · ${distance}` : ""}`}
                     </p>
 
-                    <p className="mt-1 line-clamp-2 text-xs italic text-white/80">
+                    <p className="mt-1 line-clamp-2 text-xs italic text-brown/75">
                       {place.known ? `“${place.known}”` : place.category}
                     </p>
 
@@ -679,7 +598,7 @@ export default function DiscoverPage() {
                         {place.vibe?.slice(0, 2).map((vibe) => (
                           <span
                             key={vibe}
-                            className="rounded-full bg-white/20 px-2.5 py-0.5 text-[10px] text-white/90"
+                            className="rounded-full bg-[#F1E8E3] px-2.5 py-1 text-xs text-brown"
                           >
                             {vibe}
                           </span>
@@ -695,8 +614,8 @@ export default function DiscoverPage() {
         </section>
 
         {/* DINING & SOCIAL */}
-        <section className="mt-8">
-          <div className="mb-3 flex items-center justify-between px-6">
+        <section className="mt-8 lg:mt-12">
+          <div className="mb-3 flex items-center justify-between px-6 lg:px-12">
             <h3 className="flex items-center gap-2 font-serif text-2xl font-semibold">
               🍽️ Dining &amp; Social
             </h3>
@@ -704,15 +623,15 @@ export default function DiscoverPage() {
             <button
               type="button"
               onClick={() => openMorePlaces("dining")}
-              className="text-sm font-medium text-[#8DBBD4]"
+              className="text-sm font-medium text-[#29291F]"
             >
               See all →
             </button>
           </div>
 
-          <div className="no-scrollbar flex gap-4 overflow-x-auto px-6 pb-2">
+          <div className="no-scrollbar flex gap-4 overflow-x-auto px-6 pb-2 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-12 xl:grid-cols-4">
             {dinnerSpots.length === 0 ? (
-              <div className="min-w-full rounded-2xl border border-[#E6D56D] bg-white/70 p-5 text-sm">
+              <div className="min-w-full rounded-3xl border border-[#29291F]/15 bg-white/85 p-5 text-sm lg:col-span-full lg:min-w-0">
                 <p>
                   No {activeVibe === "All" ? "" : `${activeVibe} `}
                   dining or social spots found nearby.
@@ -720,7 +639,7 @@ export default function DiscoverPage() {
                 <button
                   type="button"
                   onClick={() => openMorePlaces("dining", "All")}
-                  className="mt-3 font-medium text-[#8DBBD4] underline"
+                  className="mt-3 font-medium text-[#29291F] underline"
                 >
                   Browse all Dining &amp; Social →
                 </button>
@@ -728,17 +647,17 @@ export default function DiscoverPage() {
             ) : dinnerSpots.map((place) => {
               const distance =
                 place.distance !== Infinity
-                  ? `${place.distance}km`
+                  ? formatPlaceProximity(place.distance, place.neighbourhood)
                   : null;
 
               return (
                 <div
                   key={place.id}
                   onClick={() => handlePlaceClick(place)}
-                  className="flex min-w-52.5 max-w-52.5 cursor-pointer flex-col justify-between overflow-hidden rounded-3xl border border-[#E6D56D] bg-white shadow-sm"
+                  className="wayve-card flex min-w-52.5 max-w-52.5 cursor-pointer flex-col justify-between overflow-hidden lg:min-w-0 lg:max-w-none"
                 >
-                  <div className="relative flex h-32 items-center justify-center bg-[#4A3B2C] p-2">
-                    <span className="absolute left-3 top-3 z-10 rounded-full bg-black/40 px-2 py-0.5 text-[10px] text-white backdrop-blur-sm">
+                  <div className="relative flex h-32 items-center justify-center bg-[#F1E8E3] p-2">
+                    <span className="absolute left-3 top-3 z-10 rounded-full bg-black/40 px-2 py-1 text-xs text-white backdrop-blur-sm">
                       {place.priceTier === "Budget"
                         ? "₦"
                         : place.priceTier === "Splurge"
@@ -749,8 +668,8 @@ export default function DiscoverPage() {
                     <PlaceImage
                       src={place.image}
                       alt={place.name}
+                      category={place.category}
                       className="object-cover"
-                      fallback={<span className="text-3xl">🍲</span>}
                     />
                   </div>
 
@@ -759,9 +678,11 @@ export default function DiscoverPage() {
                       {place.name}
                     </h4>
 
-                    <p className="mt-0.5 truncate text-[11px] font-medium text-brown/70">
-                      📍 {place.neighbourhood}
-                      {distance ? ` · ${distance}` : ""}
+                    <p className="mt-0.5 truncate text-xs font-medium text-brown/80">
+                      📍{" "}
+                      {place.distance === 0
+                        ? distance
+                        : `${place.neighbourhood}${distance ? ` · ${distance}` : ""}`}
                     </p>
 
                     <div className="mt-3 flex items-center justify-between">
@@ -769,7 +690,7 @@ export default function DiscoverPage() {
                         {place.vibe?.slice(0, 1).map((vibe) => (
                           <span
                             key={vibe}
-                            className="rounded-full bg-[#F1F7FA] px-2 py-0.5 text-[10px] text-brown/80"
+                            className="rounded-full bg-[#F1E8E3] px-2 py-1 text-xs text-brown/90"
                           >
                             {vibe}
                           </span>
@@ -785,8 +706,8 @@ export default function DiscoverPage() {
         </section>
 
         {/* CAFÉS & DESSERTS */}
-        <section className="mt-8">
-          <div className="mb-3 flex items-center justify-between px-6">
+        <section className="mt-8 lg:mt-12">
+          <div className="mb-3 flex items-center justify-between px-6 lg:px-12">
             <h3 className="flex items-center gap-2 font-serif text-2xl font-semibold">
               ☕ Cafés &amp; Desserts
             </h3>
@@ -794,15 +715,15 @@ export default function DiscoverPage() {
             <button
               type="button"
               onClick={() => openMorePlaces("cafes")}
-              className="text-sm font-medium text-[#8DBBD4]"
+              className="text-sm font-medium text-[#29291F]"
             >
               See all →
             </button>
           </div>
 
-          <div className="no-scrollbar flex gap-4 overflow-x-auto px-6 pb-2">
+          <div className="no-scrollbar flex gap-4 overflow-x-auto px-6 pb-2 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-12 xl:grid-cols-4">
             {dessertAndCafes.length === 0 ? (
-              <div className="min-w-full rounded-2xl border border-[#E6D56D] bg-white/70 p-5 text-sm">
+              <div className="min-w-full rounded-3xl border border-[#29291F]/15 bg-white/85 p-5 text-sm lg:col-span-full lg:min-w-0">
                 <p>
                   No {activeVibe === "All" ? "" : `${activeVibe} `}
                   cafés or desserts found nearby.
@@ -810,7 +731,7 @@ export default function DiscoverPage() {
                 <button
                   type="button"
                   onClick={() => openMorePlaces("cafes", "All")}
-                  className="mt-3 font-medium text-[#8DBBD4] underline"
+                  className="mt-3 font-medium text-[#29291F] underline"
                 >
                   Browse all Cafés &amp; Desserts →
                 </button>
@@ -818,17 +739,17 @@ export default function DiscoverPage() {
             ) : dessertAndCafes.map((place) => {
               const distance =
                 place.distance !== Infinity
-                  ? `${place.distance}km`
+                  ? formatPlaceProximity(place.distance, place.neighbourhood)
                   : null;
 
               return (
                 <div
                   key={place.id}
                   onClick={() => handlePlaceClick(place)}
-                  className="flex min-w-52.5 max-w-52.5 cursor-pointer flex-col justify-between overflow-hidden rounded-3xl border border-[#E6D56D] bg-white shadow-sm"
+                  className="wayve-card flex min-w-52.5 max-w-52.5 cursor-pointer flex-col justify-between overflow-hidden lg:min-w-0 lg:max-w-none"
                 >
-                  <div className="relative flex h-32 items-center justify-center bg-[#2D4030] p-2">
-                    <span className="absolute left-3 top-3 z-10 rounded-full bg-black/40 px-2 py-0.5 text-[10px] text-white backdrop-blur-sm">
+                  <div className="relative flex h-32 items-center justify-center bg-[#F1E8E3] p-2">
+                    <span className="absolute left-3 top-3 z-10 rounded-full bg-black/40 px-2 py-1 text-xs text-white backdrop-blur-sm">
                       {place.priceTier === "Budget"
                         ? "₦"
                         : place.priceTier === "Splurge"
@@ -839,8 +760,8 @@ export default function DiscoverPage() {
                     <PlaceImage
                       src={place.image}
                       alt={place.name}
+                      category={place.category}
                       className="object-cover"
-                      fallback={<span className="text-3xl">☕</span>}
                     />
                   </div>
 
@@ -849,9 +770,11 @@ export default function DiscoverPage() {
                       {place.name}
                     </h4>
 
-                    <p className="mt-0.5 truncate text-[11px] font-medium text-brown/70">
-                      📍 {place.neighbourhood}
-                      {distance ? ` · ${distance}` : ""}
+                    <p className="mt-0.5 truncate text-xs font-medium text-brown/80">
+                      📍{" "}
+                      {place.distance === 0
+                        ? distance
+                        : `${place.neighbourhood}${distance ? ` · ${distance}` : ""}`}
                     </p>
 
                     <div className="mt-3 flex items-center justify-between">
@@ -859,7 +782,7 @@ export default function DiscoverPage() {
                         {place.vibe?.slice(0, 1).map((vibe) => (
                           <span
                             key={vibe}
-                            className="rounded-full bg-[#F1F7FA] px-2 py-0.5 text-[10px] text-brown/80"
+                            className="rounded-full bg-[#F1E8E3] px-2 py-1 text-xs text-brown/90"
                           >
                             {vibe}
                           </span>
@@ -874,6 +797,7 @@ export default function DiscoverPage() {
         </section>
           </>
         )}
+      </div>
       </div>
     </>
   );

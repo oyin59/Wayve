@@ -38,20 +38,20 @@ export default function NotificationsPage() {
     },
   ];
   return (
-    <div className="min-h-screen bg-[#FCF1D0] text-[#432F2E] pb-24">
+    <div className="min-h-screen bg-[#FAF7F2] text-[#29291F] pb-24">
 
       {/* Header */}
       <header className="max-w-md mx-auto px-6 pt-8 pb-5">
         <button
           onClick={() => router.back()}
-          className="mb-5 text-sm text-[#432F2E]/60"
+          className="mb-5 text-sm text-[#29291F]/60"
         >
           ← Back
         </button>
         <h1 className="font-serif text-3xl font-semibold">
           Notifications
         </h1>
-        <p className="text-sm text-[#432F2E]/60 mt-1">
+        <p className="text-sm text-[#29291F]/60 mt-1">
           Stay up to date with your Wayve activity.
         </p>
       </header>
@@ -61,9 +61,9 @@ export default function NotificationsPage() {
           {notifications.map((notification) => (
             <button
               key={notification.id}
-              className="w-full text-left bg-white/70 rounded-2xl p-4 border border-[#E6D56D]/60 flex gap-4"
+              className="w-full text-left bg-white/70 rounded-2xl p-4 border border-[#29291F]/15 flex gap-4"
             >
-              <div className="w-11 h-11 shrink-0 rounded-full bg-[#C4DAE8] flex items-center justify-center text-lg">
+              <div className="w-11 h-11 shrink-0 rounded-full bg-[#303820] flex items-center justify-center text-lg">
                 {notification.icon}
               </div>
               <div className="flex-1">
@@ -71,11 +71,11 @@ export default function NotificationsPage() {
                   <p className="font-semibold text-sm">
                     {notification.title}
                   </p>
-                  <span className="text-xs text-[#432F2E]/40 whitespace-nowrap">
+                  <span className="text-xs text-[#29291F]/40 whitespace-nowrap">
                     {notification.time}
                   </span>
                 </div>
-                <p className="text-sm text-[#432F2E]/65 mt-1 leading-relaxed">
+                <p className="text-sm text-[#29291F]/65 mt-1 leading-relaxed">
                   {notification.text}
                 </p>
               </div>

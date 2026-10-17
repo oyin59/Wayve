@@ -5,7 +5,10 @@ import { useParams, useRouter } from "next/navigation";
 import PlaceImage from "@/components/PlaceImage";
 import places from "@/data/places";
 import { DISCOVERY_VIBES } from "@/lib/onboarding";
-import { getDistanceBetween } from "@/lib/distance";
+import {
+  formatPlaceProximity,
+  getDistanceBetween,
+} from "@/lib/distance";
 import { useArea } from "@/providers/AreaProvider";
 
 const PLACE_GROUPS: Record<
@@ -64,7 +67,7 @@ export default function MorePlacesPage() {
 
   if (!group || !hasValidVibe) {
     return (
-      <main className="min-h-screen bg-[#FCF1D0] px-6 pb-24 pt-10 text-brown">
+      <main className="min-h-screen bg-[#FAF7F2] px-6 pb-24 pt-10 text-brown">
         <div className="mx-auto max-w-md rounded-3xl bg-white p-6 text-center shadow-sm">
           <h1 className="font-serif text-2xl font-semibold">
             This list isn&apos;t available
@@ -85,20 +88,20 @@ export default function MorePlacesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#FCF1D0] pb-24 text-brown">
+    <main className="min-h-screen bg-[#FAF7F2] pb-24 text-brown">
       <header className="mx-auto max-w-3xl px-5 pb-5 pt-8">
         <button
           type="button"
           onClick={() => router.push("/discover")}
-          className="mb-5 text-sm font-medium text-[#8DBBD4]"
+          className="mb-5 text-sm font-medium text-[#29291F]"
         >
           ← Discover
         </button>
         <h1 className="font-serif text-3xl font-bold">{group.title}</h1>
-        <p className="mt-1 text-sm text-brown/65">
+        <p className="mt-1 text-sm text-brown/80">
           {selectedVibe
-            ? `${selectedVibe} places · nearest to ${area} first`
-            : `All places · nearest to ${area} first`}
+            ? `${selectedVibe} places near ${area}`
+            : `Places near ${area}`}
           {" · "}
           {matchingPlaces.length}{" "}
           {matchingPlaces.length === 1 ? "place" : "places"}
@@ -114,40 +117,38 @@ export default function MorePlacesPage() {
             type="button"
             key={place.id}
             onClick={() => router.push(`/places/${place.id}`)}
-            className="flex items-center gap-3 rounded-2xl border border-[#E6D56D] bg-white p-3 text-left shadow-sm transition hover:bg-[#FFF9E8]"
+            className="wayve-card flex min-h-24 items-center gap-3 p-3 text-left transition hover:bg-[#F1E8E3]"
           >
-            <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#FFF0B5]">
+            <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#F1E8E3] sm:h-[5.5rem] sm:w-[5.5rem]">
               <PlaceImage
                 src={place.image}
                 alt={place.name}
+                category={place.category}
                 className="object-cover"
-                fallback={
-                  <span className="flex h-full items-center justify-center text-2xl">
-                    📍
-                  </span>
-                }
               />
             </div>
             <div className="min-w-0 flex-1">
-              <h2 className="truncate font-serif text-lg font-semibold">
+              <h2 className="truncate font-serif text-xl font-semibold">
                 {place.name}
               </h2>
-              <p className="mt-0.5 truncate text-xs text-brown/65">
-                {place.category} · {place.neighbourhood}
+              <p className="mt-0.5 truncate text-[13px] text-brown/80">
+                {place.category} ·{" "}
                 {Number.isFinite(place.distance)
-                  ? ` · ${place.distance}km`
-                  : ""}
+                  ? formatPlaceProximity(place.distance, place.neighbourhood)
+                  : place.neighbourhood}
               </p>
-              <p className="mt-2 text-xs text-brown/80">{place.priceTier}</p>
+              <p className="mt-2 text-xs font-medium text-brown/90">
+                {place.priceTier}
+              </p>
             </div>
-            <span aria-hidden="true" className="text-lg text-[#8DBBD4]">
+            <span aria-hidden="true" className="text-lg text-[#29291F]">
               →
             </span>
           </button>
         ))}
 
         {matchingPlaces.length === 0 && (
-          <div className="rounded-2xl border border-[#E6D56D] bg-white/70 p-6 text-center sm:col-span-2">
+          <div className="rounded-3xl border border-[#29291F]/15 bg-white/80 p-6 text-center sm:col-span-2">
             <h2 className="font-serif text-xl font-semibold">
               No {selectedVibe ? `${selectedVibe} ` : ""}places in this section
               yet

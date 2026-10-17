@@ -1,6 +1,7 @@
 "use client";
 
 import PlaceImage from "@/components/PlaceImage";
+import { formatPlaceProximity } from "@/lib/distance";
 import type { Place } from "@/types/place";
 
 interface PlaceCardProps {
@@ -20,24 +21,20 @@ const PRICE_SYMBOLS: Record<Place["priceTier"], string> = {
 export default function PlaceCard({ place, distanceKm, onClick }: PlaceCardProps) {
   const distance =
     distanceKm !== undefined && distanceKm !== Infinity
-      ? `${distanceKm}km`
+      ? formatPlaceProximity(distanceKm, place.neighbourhood)
       : null;
 
   return (
     <div
       onClick={onClick}
-      className="bg-white rounded-3xl overflow-hidden border border-[#E6D56D] shadow-sm cursor-pointer hover:shadow-md transition-shadow"
+      className="wayve-card cursor-pointer overflow-hidden transition-shadow hover:shadow-md"
     >
       {/* IMAGE */}
-      <div className="h-44 bg-[#4A3B2C] relative">
+      <div className="h-44 bg-[#29291F] relative">
         <PlaceImage
           src={place.image}
           alt={place.name}
-          fallback={
-            <div className="w-full h-full flex items-center justify-center text-5xl">
-              🍽️
-            </div>
-          }
+          category={place.category}
         />
 
         {/* PRICE */}
@@ -58,12 +55,11 @@ export default function PlaceCard({ place, distanceKm, onClick }: PlaceCardProps
             <h4 className="font-serif text-xl font-semibold truncate">
               {place.name}
             </h4>
-            <p className="text-xs text-brown/60 mt-1">
-              📍 {place.neighbourhood}
-              {distance ? ` · ${distance}` : ""}
+            <p className="mt-1 text-[13px] text-brown/80">
+              📍 {distanceKm === 0 ? distance : place.neighbourhood}
+              {distance && distanceKm !== 0 ? ` · ${distance}` : ""}
             </p>
           </div>
-          <span className="text-sm font-bold text-brown shrink-0">★ 4.7</span>
         </div>
 
         {/* VIBES */}
@@ -71,7 +67,7 @@ export default function PlaceCard({ place, distanceKm, onClick }: PlaceCardProps
           {place.vibe.slice(0, 3).map((vibe) => (
             <span
               key={vibe}
-              className="text-[10px] bg-[#F1F7FA] text-brown/80 px-3 py-1 rounded-full"
+              className="rounded-full bg-[#F1E8E3] px-3 py-1 text-xs text-brown/90"
             >
               {vibe}
             </span>
@@ -80,9 +76,14 @@ export default function PlaceCard({ place, distanceKm, onClick }: PlaceCardProps
 
         {/* DESCRIPTION */}
         {place.known && (
-          <p className="text-xs text-brown/65 italic mt-4 line-clamp-2">
-            &ldquo;{place.known}&rdquo;
-          </p>
+          <div className="mt-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-brown/70">
+              About this place
+            </p>
+            <p className="mt-1 line-clamp-2 text-[13px] italic text-brown/80">
+              {place.known}
+            </p>
+          </div>
         )}
       </div>
     </div>

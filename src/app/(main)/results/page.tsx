@@ -5,7 +5,10 @@ import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import PlaceImage from "../../../components/PlaceImage";
 import FilterPanel from "../../../components/FilterPanel";
-import { getDistanceBetween } from "../../../lib/distance";
+import {
+  formatPlaceProximity,
+  getDistanceBetween,
+} from "../../../lib/distance";
 import { findMatches, FILTER_KEYS } from "../../../lib/matching";
 import { useArea } from "../../../providers/AreaProvider";
 import type { FilterPreferences } from "../../../types/place";
@@ -23,18 +26,19 @@ function ResultsContent() {
     ])
   ) as unknown as FilterPreferences;
 
-  const hasAllPreferences = FILTER_KEYS.every(
-    (key) => Boolean(prefs[key])
+  const hasFilterPreferences = FILTER_KEYS.some((key) =>
+    searchParams.has(key),
   );
 
-  const matches = hasAllPreferences
+  const matches = hasFilterPreferences
     ? findMatches(prefs, currentArea)
     : [];
 
-  const getDistanceStr = (placeArea: string) => {
+  const getLocationLabel = (placeArea: string) => {
     const distance = getDistanceBetween(currentArea, placeArea);
 
-    return distance !== Infinity ? ` · ${distance}km` : "";
+    if (distance === Infinity) return placeArea;
+    return formatPlaceProximity(distance, placeArea);
   };
 
   return (
@@ -43,33 +47,13 @@ function ResultsContent() {
         <FilterPanel setShowFilter={setShowFilter} />
       )}
 
-      <div className="min-h-screen bg-butter p-4 pb-24 text-[#432F2E]">
-        <header className="mb-2 flex items-center justify-between px-2 py-4">
-          <button
-            type="button"
-            aria-label="Menu"
-            className="p-1 focus:outline-none"
-          >
-            <svg
-              className="h-6 w-6 text-[#432F2E]"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6h16M4 12h16"
-              />
-            </svg>
-          </button>
-
-          <h1 className="font-serif text-3xl font-medium tracking-tight text-[#432F2E]">
+      <div className="min-h-screen bg-[#FAF7F2] p-4 pb-24 text-[#29291F]">
+        <header className="mb-4 flex items-center justify-between rounded-3xl bg-[#303820] px-5 py-4 shadow-sm">
+          <h1 className="font-serif text-3xl font-medium tracking-tight text-[#29291F]">
             Wayve
           </h1>
 
-          <div className="flex max-w-[120px] items-center gap-1.5 truncate rounded-full border border-[#432F2E]/20 bg-[#C4DAE8] px-3 py-1.5 text-xs font-medium text-[#432F2E] shadow-sm">
+          <div className="flex max-w-[120px] items-center gap-1.5 truncate rounded-full border border-white/70 bg-white/80 px-3 py-1.5 text-xs font-medium text-[#29291F] shadow-sm">
             <span>📍</span>
             <span className="truncate">{currentArea}</span>
           </div>
@@ -78,12 +62,12 @@ function ResultsContent() {
         <button
           type="button"
           onClick={() => router.push("/discover")}
-          className="mb-4 flex items-center gap-1 text-sm text-[#432F2E]/70"
+          className="mb-4 flex items-center gap-1 text-sm text-[#29291F]/70"
         >
           ← Back to Discover
         </button>
 
-        <div className="mb-4 flex w-fit items-center gap-1.5 rounded-full bg-[#FFEFEF] px-3.5 py-2 text-xs font-medium text-[#432F2E]">
+        <div className="mb-4 flex w-fit items-center gap-1.5 rounded-full bg-[#EE858B] px-3.5 py-2 text-xs font-medium text-[#29291F]">
           <span>✨</span>
           <span>
             Here are {matches.length} great{" "}
@@ -94,21 +78,22 @@ function ResultsContent() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {matches.length > 0 ? (
             matches.map((place) => {
-              const distanceText = getDistanceStr(
+              const locationLabel = getLocationLabel(
                 place.neighbourhood
               );
 
               return (
                 <div
                   key={place.id}
-                  className="flex cursor-pointer flex-col justify-between overflow-hidden rounded-2xl border border-[#432F2E]/10 bg-white shadow-sm"
+                  className="wayve-card flex cursor-pointer flex-col justify-between overflow-hidden"
                   onClick={() => router.push(`/places/${place.id}`)}
                 >
                   <div>
-                    <div className="relative h-44 w-full bg-[#C4DAE8]">
+                    <div className="relative h-44 w-full bg-[#F1E8E3]">
                       <PlaceImage
                         src={place.image}
                         alt={place.name}
+                        category={place.category}
                         sizes="(max-width: 640px) 100vw, 448px"
                         className="object-cover"
                       />
@@ -117,18 +102,17 @@ function ResultsContent() {
                     <div className="space-y-3 p-4">
                       <div className="flex items-start justify-between">
                         <div>
-                          <h3 className="font-serif text-base font-medium leading-snug">
+                          <h3 className="font-serif text-lg font-semibold leading-snug">
                             {place.name}
                           </h3>
 
-                          <p className="mt-0.5 flex items-center gap-1 text-xs opacity-60">
+                          <p className="mt-0.5 flex items-center gap-1 text-[13px] text-[#29291F]/80">
                             <span>📍</span>
-                            {place.neighbourhood}
-                            {distanceText}
+                            {locationLabel}
                           </p>
                         </div>
 
-                        <span className="text-base text-[#432F2E]/30">
+                        <span className="text-base text-[#29291F]">
                           →
                         </span>
                       </div>
@@ -137,7 +121,7 @@ function ResultsContent() {
                         {place.vibe?.map((vibe) => (
                           <span
                             key={vibe}
-                            className="rounded-full border border-[#432F2E]/15 bg-[#FEEFB8] px-2.5 py-0.5 text-xs text-[#432F2E]"
+                            className="rounded-full bg-[#F1E8E3] px-2.5 py-1 text-xs text-[#29291F]"
                           >
                             {vibe}
                           </span>
@@ -145,7 +129,7 @@ function ResultsContent() {
                       </div>
 
                       {place.priceTier && (
-                        <div className="flex items-center gap-1 text-xs text-[#432F2E]/70">
+                        <div className="flex items-center gap-1 text-[13px] text-[#29291F]/85">
                           <span>💳</span>
                           <span>{place.priceTier}</span>
                         </div>
@@ -171,9 +155,9 @@ function ResultsContent() {
                           );
                         }
                       }}
-                      className="flex w-full items-center justify-center gap-1 rounded-xl bg-[#432F2E] py-2 text-xs font-medium text-white transition-opacity hover:opacity-90"
+                      className="flex w-full items-center justify-center gap-1 rounded-xl bg-[#29291F] py-2 text-xs font-medium text-white transition-opacity hover:opacity-90"
                     >
-                      <span>Get directions</span>
+                      <span>Search in Google Maps</span>
 
                       <svg
                         className="h-3 w-3"
@@ -194,19 +178,19 @@ function ResultsContent() {
               );
             })
           ) : (
-            <div className="col-span-full rounded-2xl border border-[#432F2E]/10 bg-white p-6 text-center">
+            <div className="col-span-full rounded-2xl border border-[#29291F]/10 bg-white p-6 text-center">
               <p className="font-serif text-xl font-semibold">
                 No matches found
               </p>
 
-              <p className="mt-2 text-sm text-[#432F2E]/70">
+              <p className="mt-2 text-sm text-[#29291F]/70">
                 Try changing your preferences to discover more places.
               </p>
 
               <button
                 type="button"
                 onClick={() => setShowFilter(true)}
-                className="mt-4 rounded-xl bg-[#432F2E] px-5 py-3 text-sm font-semibold text-white"
+                className="mt-4 rounded-xl bg-[#29291F] px-5 py-3 text-sm font-semibold text-white"
               >
                 Change filters
               </button>
@@ -217,9 +201,9 @@ function ResultsContent() {
         <button
           type="button"
           onClick={() => setShowFilter(true)}
-          className="mt-6 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-[#432F2E] py-4 text-sm font-semibold text-[#FEEFB8] shadow-sm transition-opacity hover:opacity-90"
+          className="mt-6 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-[#29291F] py-4 text-sm font-semibold text-[#EE858B] shadow-sm transition-opacity hover:opacity-90"
         >
-          <span>Repick your vibe</span>
+          <span>Change filters</span>
 
           <svg
             className="h-4 w-4"
@@ -243,7 +227,7 @@ function ResultsContent() {
 export default function ResultsPage() {
   return (
     <Suspense
-      fallback={<div className="min-h-screen bg-butter" />}
+      fallback={<div className="min-h-screen bg-[#FAF7F2]" />}
     >
       <ResultsContent />
     </Suspense>

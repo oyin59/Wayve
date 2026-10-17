@@ -24,13 +24,13 @@ const vibes = ["Chill", "Aesthetic", "Lively", "Cozy", "Upscale"];
 
 const budgets = ["Budget", "Mid-Range", "Splurge"];
 
-const pictureOptions = ["Yes", "Somewhat", "Doesn't matter"];
+const pictureOptions = ["Yes", "Somewhat"];
 
 const distances = [
-  "Just around the corner (~3.5km)",
-  "A short drive/ride (~7km)",
-  "Worth the trip (~15km)",
-  "Anywhere in the city (no limit)",
+  "Nearby (up to ~3.5 km)",
+  "Within ~7 km",
+  "Within ~15 km",
+  "Anywhere in Abuja (no limit)",
 ];
 
 export default function FilterPanel({
@@ -40,21 +40,14 @@ export default function FilterPanel({
   const router = useRouter();
   const { area } = useArea();
 
-  const [occasion, setOccasion] = useState("");
-  const [vibe, setVibe] = useState("");
-  const [budget, setBudget] = useState("");
-  const [pictures, setPictures] = useState("");
-  const [distance, setDistance] = useState("");
-
-  const [error, setError] = useState("");
+  const [occasion, setOccasion] = useState("Any");
+  const [vibe, setVibe] = useState("Any");
+  const [budget, setBudget] = useState("Any");
+  const [pictures, setPictures] = useState("Any");
+  const [distance, setDistance] = useState("Anywhere in Abuja (no limit)");
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    if (!occasion || !vibe || !budget || !pictures || !distance) {
-      setError("Please answer all five questions before searching.");
-      return;
-    }
 
     const preferences: FilterPreferences = {
       occasion,
@@ -63,8 +56,6 @@ export default function FilterPanel({
       pictures,
       distance,
     };
-
-    setError("");
 
     // Discover applies the filters on the current page.
     if (onApply) {
@@ -87,27 +78,29 @@ export default function FilterPanel({
     options: string[],
     selected: string,
     onSelect: (value: string) => void,
+    anyLabel: string,
   ) => (
     <div className="mt-3 grid grid-cols-2 gap-2">
-      {options.map((option) => {
-        const isSelected = selected === option;
+      {[{ value: "Any", label: anyLabel }, ...options.map((option) => ({
+        value: option,
+        label: option,
+      }))].map(({ value, label }) => {
+        const isSelected = selected === value;
 
         return (
           <button
-            key={option}
+            key={value}
             type="button"
-            onClick={() => {
-              onSelect(option);
-              setError("");
-            }}
+            aria-pressed={isSelected}
+            onClick={() => onSelect(value)}
             className={`rounded-xl border px-3 py-3 text-left text-sm transition ${
               isSelected
-                ? "border-[#432F2E] bg-[#432F2E] text-white"
-                : "border-[#E6D56D]/70 bg-white text-[#432F2E] hover:bg-[#FFF0B5]"
+                ? "border-[#29291F] bg-[#29291F] text-white"
+                : "border-[#29291F]/15 bg-white text-[#29291F] hover:bg-[#F1E8E3]"
             }`}
           >
-            {isSelected && <span className="mr-1">✓</span>}
-            {option}
+            {isSelected && <span aria-hidden="true" className="mr-1">✓</span>}
+            {label}
           </button>
         );
       })}
@@ -116,19 +109,19 @@ export default function FilterPanel({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-[#432F2E]/50 sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-[#29291F]/50 sm:items-center sm:p-4"
       onClick={() => setShowFilter(false)}
     >
       <section
         role="dialog"
         aria-modal="true"
         aria-labelledby="filter-heading"
-        className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-t-[28px] bg-[#FCF1D0] px-5 pb-8 pt-5 text-[#432F2E] sm:rounded-[28px]"
+        className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-t-[28px] bg-[#F1E8E3] px-5 pb-8 pt-5 text-[#29291F] sm:rounded-[28px]"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="mb-6 flex items-start justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#8DBBD4]">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#29291F]">
               Make it your own
             </p>
 
@@ -139,8 +132,8 @@ export default function FilterPanel({
               Find your spot
             </h2>
 
-            <p className="mt-2 text-sm text-[#432F2E]/65">
-              Tell us what you have in mind.
+            <p className="mt-2 text-sm text-[#29291F]/65">
+              Choose what matters. Leave the rest on Any.
             </p>
           </div>
 
@@ -157,41 +150,44 @@ export default function FilterPanel({
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <h3 className="font-semibold">1. What&apos;s the occasion?</h3>
-            {renderOptions(occasions, occasion, setOccasion)}
+            {renderOptions(occasions, occasion, setOccasion, "Any occasion")}
           </div>
 
           <div>
             <h3 className="font-semibold">2. What kind of vibe?</h3>
-            {renderOptions(vibes, vibe, setVibe)}
+            {renderOptions(vibes, vibe, setVibe, "Any vibe")}
           </div>
 
           <div>
             <h3 className="font-semibold">3. What&apos;s your budget?</h3>
-            {renderOptions(budgets, budget, setBudget)}
+            {renderOptions(budgets, budget, setBudget, "Any budget")}
           </div>
 
           <div>
             <h3 className="font-semibold">
               4. How important are pictures?
             </h3>
-            {renderOptions(pictureOptions, pictures, setPictures)}
+            {renderOptions(pictureOptions, pictures, setPictures, "Any preference")}
           </div>
 
           <div>
             <h3 className="font-semibold">5. How far would you go?</h3>
+            <p className="mt-1 text-xs text-[#29291F]/60">
+              Distance from your selected area.
+            </p>
             <div className="mt-3 space-y-2">
               {distances.map((option) => (
                 <button
                   key={option}
                   type="button"
+                  aria-pressed={distance === option}
                   onClick={() => {
                     setDistance(option);
-                    setError("");
                   }}
                   className={`w-full rounded-xl border px-3 py-3 text-left text-sm transition ${
                     distance === option
-                      ? "border-[#432F2E] bg-[#432F2E] text-white"
-                      : "border-[#E6D56D]/70 bg-white text-[#432F2E] hover:bg-[#FFF0B5]"
+                      ? "border-[#29291F] bg-[#29291F] text-white"
+                      : "border-[#29291F]/15 bg-white text-[#29291F] hover:bg-[#F1E8E3]"
                   }`}
                 >
                   {distance === option ? "✓ " : ""}
@@ -201,15 +197,9 @@ export default function FilterPanel({
             </div>
           </div>
 
-          {error && (
-            <p role="alert" className="text-sm text-red-700">
-              {error}
-            </p>
-          )}
-
           <button
             type="submit"
-            className="w-full rounded-xl bg-[#432F2E] py-4 font-semibold text-white transition hover:opacity-90"
+            className="w-full rounded-xl bg-[#29291F] py-4 font-semibold text-white transition hover:opacity-90"
           >
             Find my spots
           </button>
@@ -217,16 +207,15 @@ export default function FilterPanel({
           <button
             type="button"
             onClick={() => {
-              setOccasion("");
-              setVibe("");
-              setBudget("");
-              setPictures("");
-              setDistance("");
-              setError("");
+              setOccasion("Any");
+              setVibe("Any");
+              setBudget("Any");
+              setPictures("Any");
+              setDistance("Anywhere in Abuja (no limit)");
             }}
-            className="w-full py-2 text-sm text-[#432F2E]/65 underline"
+            className="w-full py-2 text-sm font-medium text-[#29291F] underline"
           >
-            Clear selections
+            Reset to any
           </button>
         </form>
       </section>

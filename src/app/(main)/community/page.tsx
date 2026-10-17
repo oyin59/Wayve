@@ -104,7 +104,7 @@ export default function CommunityPage() {
     displayedPosts = following;
   }
   return (
-    <div className="min-h-screen bg-[#FCF1D0] text-brown pb-24">
+    <div className="min-h-screen bg-[#FAF7F2] text-brown pb-24">
       {/* Header */}
       <header className="px-5 pt-8 pb-4 max-w-md mx-auto">
         <div className="flex items-center justify-between">
@@ -152,7 +152,7 @@ export default function CommunityPage() {
             {/* User */}
             <div className="px-4 py-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#C4DAE8] flex items-center justify-center font-semibold">
+                <div className="w-10 h-10 rounded-full bg-[#303820] flex items-center justify-center font-semibold">
                   {post.initials}
                 </div>
                 <div>
@@ -176,7 +176,7 @@ export default function CommunityPage() {
               </button>
             </div>
             {/* Image */}
-            <div className="relative w-full aspect-[4/3] bg-[#E8E1D2]">
+            <div className="relative w-full aspect-[4/3] bg-[#EE858B]">
               <PlaceImage src={post.image} alt={post.place} fallback={null} />
             </div>
             {/* Post content */}

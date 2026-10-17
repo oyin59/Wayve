@@ -16,19 +16,19 @@ export default function CreateListPage() {
     router.push("/saved");
   };
   return (
-    <div className="min-h-screen bg-[#FCF1D0] text-[#432F2E] pb-24">
+    <div className="min-h-screen bg-[#FAF7F2] text-[#29291F] pb-24">
       {/* Header */}
       <header className="max-w-md mx-auto px-6 pt-8 pb-5">
         <button
           onClick={() => router.back()}
-          className="text-sm text-[#432F2E]/60 mb-5 hover:text-[#432F2E] transition-colors"
+          className="text-sm text-[#29291F]/60 mb-5 hover:text-[#29291F] transition-colors"
         >
           ← Back
         </button>
         <div>
-          <p className="text-sm text-[#432F2E]/50">New collection</p>
+          <p className="text-sm text-[#29291F]/50">New collection</p>
           <h1 className="font-serif text-3xl font-semibold mt-1">Create a list</h1>
-          <p className="text-sm text-[#432F2E]/60 mt-2">
+          <p className="text-sm text-[#29291F]/60 mt-2">
             Organize your favorite spots by vibe, neighborhood, or occasion.
           </p>
         </div>
@@ -36,8 +36,8 @@ export default function CreateListPage() {
       {/* Form */}
       <main className="max-w-md mx-auto px-6 mt-2">
         <form onSubmit={handleCreate} className="space-y-5">
-          <div className="bg-white/75 rounded-2xl p-4 border border-[#E6D56D]/60 space-y-1">
-            <label className="text-xs font-semibold uppercase tracking-wide text-[#432F2E]/50">
+          <div className="bg-white/75 rounded-2xl p-4 border border-[#29291F]/15 space-y-1">
+            <label className="text-xs font-semibold uppercase tracking-wide text-[#29291F]/50">
               List Name
             </label>
             <input
@@ -45,12 +45,12 @@ export default function CreateListPage() {
               placeholder="e.g., Abuja Date Spots, Cute Cafés"
               value={listName}
               onChange={(e) => setListName(e.target.value)}
-              className="w-full bg-transparent text-lg font-serif outline-none placeholder-[#432F2E]/30 text-[#432F2E]"
+              className="w-full bg-transparent text-lg font-serif outline-none placeholder-[#29291F]/30 text-[#29291F]"
               required
             />
           </div>
-          <div className="bg-white/75 rounded-2xl p-4 border border-[#E6D56D]/60 space-y-1">
-            <label className="text-xs font-semibold uppercase tracking-wide text-[#432F2E]/50">
+          <div className="bg-white/75 rounded-2xl p-4 border border-[#29291F]/15 space-y-1">
+            <label className="text-xs font-semibold uppercase tracking-wide text-[#29291F]/50">
               Description (Optional)
             </label>
             <textarea
@@ -58,13 +58,13 @@ export default function CreateListPage() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
-              className="w-full bg-transparent text-sm outline-none resize-none placeholder-[#432F2E]/30 text-[#432F2E]"
+              className="w-full bg-transparent text-sm outline-none resize-none placeholder-[#29291F]/30 text-[#29291F]"
             />
           </div>
-          <div className="bg-white/75 rounded-2xl p-4 border border-[#E6D56D]/60 flex items-center justify-between">
+          <div className="bg-white/75 rounded-2xl p-4 border border-[#29291F]/15 flex items-center justify-between">
             <div>
               <p className="font-serif font-medium text-base">Private list</p>
-              <p className="text-xs text-[#432F2E]/50 mt-0.5">
+              <p className="text-xs text-[#29291F]/50 mt-0.5">
                 Only you can view this collection
               </p>
             </div>
@@ -72,12 +72,12 @@ export default function CreateListPage() {
               type="checkbox"
               checked={isPrivate}
               onChange={(e) => setIsPrivate(e.target.checked)}
-              className="w-5 h-5 accent-[#432F2E] rounded cursor-pointer"
+              className="w-5 h-5 accent-[#29291F] rounded cursor-pointer"
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-[#432F2E] text-white font-medium py-3.5 rounded-xl shadow-sm hover:opacity-95 transition-opacity mt-4"
+            className="w-full bg-[#29291F] text-white font-medium py-3.5 rounded-xl shadow-sm hover:opacity-95 transition-opacity mt-4"
           >
             Create list
           </button>

@@ -27,10 +27,10 @@ const SLIDES: Slide[] = [
     button: "Next",
     next: "/onboarding/2",
     art: (
-      <div className="mt-10 h-[330px] rounded-[32px] bg-[#C4DAE8] overflow-hidden flex items-center justify-center">
+      <div className="mt-10 h-[330px] rounded-[32px] bg-[#303820] overflow-hidden flex items-center justify-center">
         <div className="text-center px-8">
           <div className="text-7xl mb-5">🍽️☕</div>
-          <p className="text-sm text-[#432F2E]/50">
+          <p className="text-sm text-[#29291F]/50">
             Discover amazing places around Abuja
           </p>
         </div>
@@ -50,18 +50,18 @@ const SLIDES: Slide[] = [
     button: "Next",
     next: "/onboarding/3",
     art: (
-      <div className="mt-10 h-[330px] rounded-[32px] bg-white border border-[#E6D56D] overflow-hidden p-5">
+      <div className="mt-10 h-[330px] rounded-[32px] bg-white border border-[#29291F]/15 overflow-hidden p-5">
         <div className="grid grid-cols-2 gap-3 h-full">
-          <div className="rounded-2xl bg-[#C4DAE8] flex items-center justify-center text-5xl">
+          <div className="rounded-2xl bg-[#303820] flex items-center justify-center text-5xl">
             ☕
           </div>
-          <div className="rounded-2xl bg-[#FFF0B5] flex items-center justify-center text-5xl">
+          <div className="rounded-2xl bg-[#EE858B] flex items-center justify-center text-5xl">
             🍜
           </div>
-          <div className="rounded-2xl bg-[#E8D9D1] flex items-center justify-center text-5xl">
+          <div className="rounded-2xl bg-[#EE858B] flex items-center justify-center text-5xl">
             🌆
           </div>
-          <div className="rounded-2xl bg-[#D8E4D4] flex items-center justify-center text-5xl">
+          <div className="rounded-2xl bg-[#303820] flex items-center justify-center text-5xl">
             🍰
           </div>
         </div>
@@ -81,12 +81,12 @@ const SLIDES: Slide[] = [
     button: "Get started",
     next: "/area-picker",
     art: (
-      <div className="mt-10 h-[330px] rounded-[32px] overflow-hidden bg-[#2E1E1A] relative">
+      <div className="mt-10 h-[330px] rounded-[32px] overflow-hidden bg-[#29291F] relative">
         <div className="absolute inset-0 flex items-center justify-center text-8xl">
           🌆
         </div>
         <div className="absolute bottom-5 left-5 right-5 bg-white/90 backdrop-blur-md rounded-2xl p-4">
-          <p className="text-xs text-[#432F2E]/60">Wayve recommendation</p>
+          <p className="text-xs text-[#29291F]/60">Wayve recommendation</p>
           <p className="font-serif text-xl mt-1">A place that fits you.</p>
         </div>
       </div>
@@ -107,15 +107,15 @@ export default function OnboardingScreen({ step }: { step: number }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#FCF1D0] text-[#432F2E] flex flex-col px-6 py-6 max-w-md mx-auto">
+    <div className="min-h-screen bg-[#FAF7F2] text-[#29291F] flex flex-col px-6 py-6 max-w-md mx-auto">
       {/* Top */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-serif">
-          Way<span className="italic text-[#8DBBD4]">ve</span>
+          Way<span className="italic text-[#29291F]">ve</span>
         </h1>
         <button
           onClick={handleSkip}
-          className="text-sm text-[#432F2E]/60"
+          className="text-sm text-[#29291F]/60"
         >
           Skip
         </button>
@@ -127,7 +127,7 @@ export default function OnboardingScreen({ step }: { step: number }) {
           <div
             key={i}
             className={`h-1.5 flex-1 rounded-full ${
-              i < step ? "bg-[#432F2E]" : "bg-[#E6D56D]"
+              i < step ? "bg-[#29291F]" : "bg-[#303820]"
             }`}
           />
         ))}
@@ -138,11 +138,11 @@ export default function OnboardingScreen({ step }: { step: number }) {
 
       {/* Text */}
       <div className="mt-8">
-        <p className="text-xs uppercase tracking-[0.2em] font-semibold text-[#8DBBD4]">
+        <p className="text-xs uppercase tracking-[0.2em] font-semibold text-[#29291F]">
           {slide.eyebrow}
         </p>
         <h2 className="font-serif text-4xl leading-tight mt-2">{slide.title}</h2>
-        <p className="mt-4 text-base leading-relaxed text-[#432F2E]/70">
+        <p className="mt-4 text-base leading-relaxed text-[#29291F]/70">
           {slide.body}
         </p>
       </div>
@@ -151,7 +151,7 @@ export default function OnboardingScreen({ step }: { step: number }) {
       <div className="mt-auto pt-8">
         <button
           onClick={() => router.push(slide.next)}
-          className="w-full bg-[#432F2E] text-white py-4 rounded-2xl font-semibold active:scale-[0.98] transition"
+          className="w-full bg-[#29291F] text-white py-4 rounded-2xl font-semibold active:scale-[0.98] transition"
         >
           {slide.button}
         </button>

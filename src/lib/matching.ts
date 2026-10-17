@@ -3,6 +3,10 @@ import { getDistanceBetween } from "./distance";
 import type { FilterPreferences, Place } from "../types/place";
 
 const DISTANCE_LIMITS: Record<string, number> = {
+  "Nearby (up to ~3.5 km)": 3.5,
+  "Within ~7 km": 7,
+  "Within ~15 km": 15,
+  "Anywhere in Abuja": Infinity,
   "Just around the corner": 3.5,
   "A short drive/ride": 7,
   "Worth the trip": 15,
@@ -18,12 +22,12 @@ export const FILTER_KEYS = [
 ] as const;
 
 /**
- * Finds the distance limit even when the option
- * includes additional text, such as "(~3.5km)".
+ * Finds the distance limit from a current or legacy filter label.
  */
 function getDistanceLimit(value: string): number {
-  const matchingOption = Object.keys(DISTANCE_LIMITS).find(
-    (option) => value.trim().startsWith(option)
+  const normalisedValue = value.trim();
+  const matchingOption = Object.keys(DISTANCE_LIMITS).find((option) =>
+    normalisedValue.startsWith(option),
   );
 
   return matchingOption
@@ -40,7 +44,7 @@ function normalise(value: string): string {
 }
 
 /**
- * Matches places against the user's five filter answers.
+ * Matches places against the user's selected filters; Any values are ignored.
  */
 export function findMatches(
   prefs: FilterPreferences,
@@ -55,30 +59,36 @@ export function findMatches(
     );
 
     const matchesDistance =
+      !prefs.distance ||
+      normalise(prefs.distance) === "any" ||
       realDistance <= distanceMax;
 
     const matchesBudget =
-      normalise(place.priceTier) ===
-      normalise(prefs.budget);
+      !prefs.budget ||
+      normalise(prefs.budget) === "any" ||
+      normalise(place.priceTier) === normalise(prefs.budget);
 
     const matchesVibe =
-      place.vibe?.some(
-        (vibe) =>
-          normalise(vibe) === normalise(prefs.vibe)
-      ) ?? false;
+      !prefs.vibe ||
+      normalise(prefs.vibe) === "any" ||
+      (place.vibe?.some(
+        (vibe) => normalise(vibe) === normalise(prefs.vibe),
+      ) ?? false);
 
     const matchesOccasion =
-      place.occasion?.some(
-        (occasion) =>
-          normalise(occasion) ===
-          normalise(prefs.occasion)
-      ) ?? false;
+      !prefs.occasion ||
+      normalise(prefs.occasion) === "any" ||
+      (place.occasion?.some(
+        (occasion) => normalise(occasion) === normalise(prefs.occasion),
+      ) ?? false);
 
     const picturePreference = normalise(
       prefs.pictures.replace("’", "'")
     );
 
     const matchesPictures =
+      !picturePreference ||
+      picturePreference === "any" ||
       picturePreference === "doesn't matter" ||
       picturePreference === "does not matter" ||
       (picturePreference === "yes" &&

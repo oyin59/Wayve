@@ -49,7 +49,7 @@ export default function BusinessesPage() {
     router.push(`/places/${place.id}`);
   };
   return (
-    <div className="min-h-screen bg-[#FCF1D0] text-brown pb-24">
+    <div className="min-h-screen bg-[#FAF7F2] text-brown pb-24">
       {/* LOCATION PICKER */}
       {showLocationPicker && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4">
@@ -82,7 +82,7 @@ export default function BusinessesPage() {
                   className={`p-3 text-xs rounded-2xl border text-left transition-all ${
                     currentArea === area
                       ? "bg-brown text-white border-brown font-semibold"
-                      : "bg-[#FCF1D0]/30 border-[#E6D56D] text-brown hover:bg-[#FCF1D0]"
+                      : "bg-white border-[#29291F]/15 text-brown hover:bg-[#F1E8E3]"
                   }`}
                 >
                   📍 {area}
@@ -98,7 +98,7 @@ export default function BusinessesPage() {
           {/* Back */}
           <button
             onClick={() => router.back()}
-            className="w-10 h-10 rounded-full bg-white border border-[#E6D56D] flex items-center justify-center"
+            className="w-10 h-10 rounded-full bg-white border border-[#29291F]/15 flex items-center justify-center"
           >
             ←
           </button>
@@ -109,7 +109,7 @@ export default function BusinessesPage() {
           {/* Location */}
           <button
             onClick={() => setShowLocationPicker(true)}
-            className="w-10 h-10 rounded-full bg-white border border-[#E6D56D] flex items-center justify-center"
+            className="w-10 h-10 rounded-full bg-white border border-[#29291F]/15 flex items-center justify-center"
           >
             📍
           </button>
@@ -117,7 +117,7 @@ export default function BusinessesPage() {
         {/* Location label */}
         <button
           onClick={() => setShowLocationPicker(true)}
-          className="mt-4 flex items-center gap-2 text-sm text-brown/70"
+          className="mt-4 flex items-center gap-2 text-sm text-brown/80"
         >
           <span>📍</span>
           <span>
@@ -136,7 +136,7 @@ export default function BusinessesPage() {
         <h2 className="font-serif text-4xl leading-tight">
           Find a place
           <br />
-          <span className="italic text-[#8DBBD4]">
+          <span className="italic text-[#29291F]">
             you&apos;ll love.
           </span>
         </h2>
@@ -146,7 +146,7 @@ export default function BusinessesPage() {
       </section>
       {/* SEARCH */}
       <section className="px-6 mt-6">
-        <div className="flex items-center gap-3 bg-white border border-[#E6D56D] rounded-2xl px-4 py-3.5 shadow-sm">
+        <div className="flex items-center gap-3 bg-white border border-[#29291F]/15 rounded-2xl px-4 py-3.5 shadow-sm">
           <span className="text-lg text-brown/50">
             🔍
           </span>
@@ -180,7 +180,7 @@ export default function BusinessesPage() {
               className={`whitespace-nowrap px-5 py-3 rounded-full text-sm transition-all ${
                 selectedCategory === category
                   ? "bg-brown text-white"
-                  : "bg-white border border-[#E6D56D] text-brown"
+                    : "bg-white border border-[#29291F]/15 text-brown"
               }`}
             >
               {category}
@@ -195,7 +195,7 @@ export default function BusinessesPage() {
             <h3 className="font-serif text-2xl font-semibold">
               Places near you
             </h3>
-            <p className="text-xs text-brown/60 mt-1">
+            <p className="text-sm text-brown/75 mt-1">
               {filteredBusinesses.length}{" "}
               {filteredBusinesses.length === 1
                 ? "place"
@@ -205,7 +205,7 @@ export default function BusinessesPage() {
           </div>
           <button
             onClick={() => setShowLocationPicker(true)}
-            className="text-sm text-[#8DBBD4] font-semibold"
+            className="text-sm text-[#29291F] font-semibold"
           >
             Change area
           </button>
@@ -226,7 +226,7 @@ export default function BusinessesPage() {
           </div>
         ) : (
           /* EMPTY STATE */
-          <div className="bg-white rounded-3xl border border-[#E6D56D] p-8 text-center">
+          <div className="wayve-card p-8 text-center">
             <div className="text-5xl mb-4">
               🔎
             </div>

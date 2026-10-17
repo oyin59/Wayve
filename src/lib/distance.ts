@@ -61,7 +61,7 @@ export const AREA_COORDINATES: Record<string, { lat: number; lng: number }> = {
   "Wuse": { lat: 9.0667, lng: 7.4833 },
   "Wuye": { lat: 9.0400, lng: 7.4500 },
 };
-// Calculates straight-line distance in kilometers between two areas
+// Estimates straight-line distance between the selected area centres.
 export const getDistanceBetween = (
   area1?: string | null,
   area2?: string | null,
@@ -70,7 +70,7 @@ export const getDistanceBetween = (
   // Normalize potential legacy names (e.g., "Wuse 2" or "Central Area" mapped to new list)
   const norm1: string = area1.includes("Wuse") ? "Wuse" : area1.includes("CBD") || area1.includes("Central") ? "Central Business District (CBD)" : area1;
   const norm2: string = area2.includes("Wuse") ? "Wuse" : area2.includes("CBD") || area2.includes("Central") ? "Central Business District (CBD)" : area2;
-  if (norm1 === norm2) return 1.0;
+  if (norm1 === norm2) return 0;
   const coord1 = AREA_COORDINATES[norm1];
   const coord2 = AREA_COORDINATES[norm2];
   if (!coord1 || !coord2) return Infinity;
@@ -84,7 +84,16 @@ export const getDistanceBetween = (
       Math.sin(dLng / 2) *
       Math.sin(dLng / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  const dist = R * c;
-  // Multiply by road curvature factor (~1.3x) for accurate driving estimation
-  return Math.round(dist * 1.3 * 10) / 10;
+  return Math.round(R * c * 10) / 10;
 };
+
+export function formatAreaDistance(distance: number): string {
+  return `~${distance.toFixed(1)} km`;
+}
+
+export function formatPlaceProximity(
+  distance: number,
+  placeArea: string,
+): string {
+  return distance === 0 ? `In ${placeArea}` : formatAreaDistance(distance);
+}
