@@ -117,9 +117,9 @@ export default function MorePlacesPage() {
             type="button"
             key={place.id}
             onClick={() => router.push(`/places/${place.id}`)}
-            className="wayve-card flex min-h-24 items-center gap-3 p-3 text-left transition hover:bg-[#F1E8E3]"
+            className="wayve-card flex min-h-24 items-center gap-3 p-3 text-left transition hover:bg-[#E9E6D8]"
           >
-            <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#F1E8E3] sm:h-[5.5rem] sm:w-[5.5rem]">
+            <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#E9E6D8] sm:h-[5.5rem] sm:w-[5.5rem]">
               <PlaceImage
                 src={place.image}
                 alt={place.name}

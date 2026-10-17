@@ -6,11 +6,6 @@ import { useRouter } from "next/navigation";
 import { useArea } from "../providers/AreaProvider";
 import type { FilterPreferences } from "../types/place";
 
-interface FilterPanelProps {
-  setShowFilter: (show: boolean) => void;
-  onApply?: (preferences: FilterPreferences) => void;
-}
-
 const occasions = [
   "Solo date",
   "Girls day",
@@ -25,6 +20,11 @@ const vibes = ["Chill", "Aesthetic", "Lively", "Cozy", "Upscale"];
 const budgets = ["Budget", "Mid-Range", "Splurge"];
 
 const pictureOptions = ["Yes", "Somewhat"];
+
+interface FilterPanelProps {
+  setShowFilter: (show: boolean) => void;
+  onApply?: (preferences: FilterPreferences) => void;
+}
 
 const distances = [
   "Nearby (up to ~3.5 km)",
@@ -96,7 +96,7 @@ export default function FilterPanel({
             className={`rounded-xl border px-3 py-3 text-left text-sm transition ${
               isSelected
                 ? "border-[#29291F] bg-[#29291F] text-white"
-                : "border-[#29291F]/15 bg-white text-[#29291F] hover:bg-[#F1E8E3]"
+                : "border-[#29291F]/15 bg-white text-[#29291F] hover:bg-[#E9E6D8]"
             }`}
           >
             {isSelected && <span aria-hidden="true" className="mr-1">✓</span>}
@@ -116,7 +116,7 @@ export default function FilterPanel({
         role="dialog"
         aria-modal="true"
         aria-labelledby="filter-heading"
-        className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-t-[28px] bg-[#F1E8E3] px-5 pb-8 pt-5 text-[#29291F] sm:rounded-[28px]"
+        className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-t-[28px] bg-[#E9E6D8] px-5 pb-8 pt-5 text-[#29291F] sm:rounded-[28px]"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="mb-6 flex items-start justify-between">
@@ -187,7 +187,7 @@ export default function FilterPanel({
                   className={`w-full rounded-xl border px-3 py-3 text-left text-sm transition ${
                     distance === option
                       ? "border-[#29291F] bg-[#29291F] text-white"
-                      : "border-[#29291F]/15 bg-white text-[#29291F] hover:bg-[#F1E8E3]"
+                      : "border-[#29291F]/15 bg-white text-[#29291F] hover:bg-[#E9E6D8]"
                   }`}
                 >
                   {distance === option ? "✓ " : ""}

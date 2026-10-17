@@ -71,7 +71,7 @@ export default function SavedListView({ list }: SavedListViewProps) {
               className="w-full text-left bg-white/75 rounded-2xl overflow-hidden border border-[#29291F]/15"
             >
               {/* Image */}
-              <div className="relative h-40 bg-[#F1E8E3]">
+              <div className="relative h-40 bg-[#E9E6D8]">
                 <PlaceImage
                   src={place.image}
                   alt={place.name}
@@ -93,12 +93,12 @@ export default function SavedListView({ list }: SavedListViewProps) {
                   <span className="text-[#29291F]/40">♡</span>
                 </div>
 
-                <div className="flex gap-2 mt-3 flex-wrap">
-                  <span className="text-xs px-3 py-1 rounded-full bg-[#EE858B]">
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <span className="rounded-full bg-[#D9B574] px-3 py-1 text-xs">
                     {place.priceTier}
                   </span>
                   {place.vibe[0] && (
-                    <span className="text-xs px-3 py-1 rounded-full bg-[#303820]/60">
+                    <span className="rounded-full bg-[#303820]/60 px-3 py-1 text-xs">
                       {place.vibe[0]}
                     </span>
                   )}

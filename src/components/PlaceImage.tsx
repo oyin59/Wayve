@@ -15,11 +15,11 @@ interface PlaceImageProps {
 }
 
 const CATEGORY_ART: Record<string, { icon: string; color: string }> = {
-  Café: { icon: "☕", color: "from-[#F1E8E3] to-[#F8EEE8]" },
+  Café: { icon: "☕", color: "from-[#E9E6D8] to-[#F8EEE8]" },
   Sweets: { icon: "🍰", color: "from-[#F8EEE8] to-[#F6DFDD]" },
   Dining: { icon: "🍽️", color: "from-[#F4EEE4] to-[#E6EBD2]" },
   Global: { icon: "🥘", color: "from-[#E6EBD2] to-[#F8EEE8]" },
-  Social: { icon: "🎉", color: "from-[#F6DFDD] to-[#F1E8E3]" },
+  Social: { icon: "🎉", color: "from-[#F6DFDD] to-[#E9E6D8]" },
   Local: { icon: "🍲", color: "from-[#F2E9DC] to-[#E6EBD2]" },
 };
 

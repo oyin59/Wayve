@@ -64,7 +64,6 @@ export default function DiscoverPage() {
     });
   }, [filteredPlaces, searchQuery]);
 
-  // Quick vibes filter only the two category carousels.
   const getNearbyPlaces = (
     categoryFilter: string[],
     limit = 5,
@@ -149,7 +148,7 @@ export default function DiscoverPage() {
   };
 
   const perfectForYou = getNearbyPlaces(
-    ["Dining", "Global", "Social", "Café", "Sweets"],
+    ["Attraction", "Dining", "Global", "Social", "Café", "Sweets"],
     4
   );
 
@@ -218,7 +217,7 @@ export default function DiscoverPage() {
                   className={`rounded-2xl border p-2.5 text-left text-xs transition-all ${
                     currentArea === area
                       ? "border-brown bg-brown font-semibold text-white"
-                      : "border-[#29291F]/15 bg-[#F1E8E3]/30 text-brown hover:bg-[#F1E8E3]"
+                      : "border-[#29291F]/15 bg-[#E9E6D8]/30 text-brown hover:bg-[#E9E6D8]"
                   }`}
                 >
                   📍 {area}
@@ -232,7 +231,7 @@ export default function DiscoverPage() {
       {/* SURPRISE ME MODAL */}
       {showSurpriseModal && surpriseSpot && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-sm">
-          <div className="w-full max-w-md animate-in slide-in-from-bottom rounded-t-4xl bg-[#F1E8E3] p-6 shadow-2xl duration-300">
+          <div className="w-full max-w-md animate-in slide-in-from-bottom rounded-t-4xl bg-[#E9E6D8] p-6 shadow-2xl duration-300">
             <button
               type="button"
               aria-label="Close surprise spot"
@@ -280,12 +279,12 @@ export default function DiscoverPage() {
                       🕯 {vibe}
                     </span>
                   ))}
-
                   {surpriseSpot.status === "Unverified" && (
                     <span className="rounded-full bg-amber-100 px-3 py-1 text-xs text-amber-900">
                       Not verified by Wayve
                     </span>
                   )}
+
                 </div>
               </div>
             </div>
@@ -294,7 +293,7 @@ export default function DiscoverPage() {
               <button
                 type="button"
                 onClick={handleTryAnother}
-                className="flex items-center justify-center gap-2 rounded-2xl border border-[#29291F]/15 bg-[#EE858B] py-3.5 text-sm font-bold text-brown transition-transform active:scale-95"
+                className="flex items-center justify-center gap-2 rounded-2xl border border-[#29291F]/15 bg-[#D9B574] py-3.5 text-sm font-bold text-brown transition-transform active:scale-95"
               >
                 🔄 Try another
               </button>
@@ -320,7 +319,7 @@ export default function DiscoverPage() {
         {/* HEADER */}
         <header className="flex items-center justify-between px-6 py-4 lg:px-12 lg:py-6">
           <h1 className="font-serif text-3xl">
-            Way<span className="italic text-[#EE858B]">ve</span>
+            Way<span className="italic text-[#D9B574]">ve</span>
           </h1>
 
           <div className="flex items-center gap-2">
@@ -333,7 +332,7 @@ export default function DiscoverPage() {
                 searchInput?.focus();
               }}
               aria-label="Focus search"
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EE858B]"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-[#D9B574]"
             >
               🔍
             </button>
@@ -358,7 +357,7 @@ export default function DiscoverPage() {
               <h2 className="font-serif text-4xl leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
                 Find your
                 <br className="lg:hidden" />
-                <span className="italic text-[#EE858B]">next</span> spot
+                <span className="italic text-[#D9B574]">next</span> spot
               </h2>
             </div>
 
@@ -452,7 +451,7 @@ export default function DiscoverPage() {
               <span className="text-lg">☷</span>
               More filters
               {filterPreferences && (
-                <span className="rounded-full bg-[#F1E8E3] px-2 py-0.5 text-xs text-brown">
+                <span className="rounded-full bg-[#E9E6D8] px-2 py-0.5 text-xs text-brown">
                   Applied
                 </span>
               )}
@@ -495,7 +494,7 @@ export default function DiscoverPage() {
                     onClick={() => handlePlaceClick(place)}
                     className="wayve-card flex items-center gap-3 p-3 text-left transition hover:bg-[#FAF7F2]"
                   >
-                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#EE858B]">
+                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-[#D9B574]">
                       <PlaceImage
                         src={place.image}
                         alt={place.name}
@@ -511,6 +510,11 @@ export default function DiscoverPage() {
                       <p className="mt-0.5 truncate text-[13px] text-brown/80">
                         {place.category} · {place.neighbourhood}
                       </p>
+                      {place.status === "Unverified" && (
+                        <p className="mt-1 text-xs font-medium text-amber-800">
+                          Not verified by Wayve
+                        </p>
+                      )}
                       <p className="mt-2 text-xs text-brown/80">
                         {place.priceTier}
                       </p>
@@ -564,7 +568,7 @@ export default function DiscoverPage() {
                   className="relative flex min-h-60 min-w-70 max-w-70 cursor-pointer flex-col justify-between rounded-3xl border border-[#29291F]/15 bg-white p-5 text-[#29291F] shadow-sm transition hover:shadow-md lg:min-w-0 lg:max-w-none"
                 >
                   <div className="mb-10 flex items-start justify-between">
-                    <span className="rounded-full bg-[#F1E8E3] px-3 py-1 text-xs font-semibold tracking-wider">
+                    <span className="rounded-full bg-[#E9E6D8] px-3 py-1 text-xs font-semibold tracking-wider">
                       {place.priceTier === "Budget"
                         ? "₦"
                         : place.priceTier === "Splurge"
@@ -572,7 +576,7 @@ export default function DiscoverPage() {
                         : "₦₦"}
                     </span>
 
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#EE858B]/70 text-xs">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#D9B574]/70 text-xs">
                       📍
                     </span>
                   </div>
@@ -588,6 +592,11 @@ export default function DiscoverPage() {
                         ? distance
                         : `${place.neighbourhood}${distance ? ` · ${distance}` : ""}`}
                     </p>
+                    {place.status === "Unverified" && (
+                      <p className="mt-1 text-xs font-medium text-amber-800">
+                        Not verified by Wayve
+                      </p>
+                    )}
 
                     <p className="mt-1 line-clamp-2 text-xs italic text-brown/75">
                       {place.known ? `“${place.known}”` : place.category}
@@ -598,7 +607,7 @@ export default function DiscoverPage() {
                         {place.vibe?.slice(0, 2).map((vibe) => (
                           <span
                             key={vibe}
-                            className="rounded-full bg-[#F1E8E3] px-2.5 py-1 text-xs text-brown"
+                            className="rounded-full bg-[#E9E6D8] px-2.5 py-1 text-xs text-brown"
                           >
                             {vibe}
                           </span>
@@ -633,8 +642,7 @@ export default function DiscoverPage() {
             {dinnerSpots.length === 0 ? (
               <div className="min-w-full rounded-3xl border border-[#29291F]/15 bg-white/85 p-5 text-sm lg:col-span-full lg:min-w-0">
                 <p>
-                  No {activeVibe === "All" ? "" : `${activeVibe} `}
-                  dining or social spots found nearby.
+                  No dining or social spots found nearby.
                 </p>
                 <button
                   type="button"
@@ -656,7 +664,7 @@ export default function DiscoverPage() {
                   onClick={() => handlePlaceClick(place)}
                   className="wayve-card flex min-w-52.5 max-w-52.5 cursor-pointer flex-col justify-between overflow-hidden lg:min-w-0 lg:max-w-none"
                 >
-                  <div className="relative flex h-32 items-center justify-center bg-[#F1E8E3] p-2">
+                  <div className="relative flex h-32 items-center justify-center bg-[#E9E6D8] p-2">
                     <span className="absolute left-3 top-3 z-10 rounded-full bg-black/40 px-2 py-1 text-xs text-white backdrop-blur-sm">
                       {place.priceTier === "Budget"
                         ? "₦"
@@ -684,13 +692,18 @@ export default function DiscoverPage() {
                         ? distance
                         : `${place.neighbourhood}${distance ? ` · ${distance}` : ""}`}
                     </p>
+                    {place.status === "Unverified" && (
+                      <p className="mt-1 text-xs font-medium text-amber-800">
+                        Not verified by Wayve
+                      </p>
+                    )}
 
                     <div className="mt-3 flex items-center justify-between">
                       <div className="flex gap-1">
                         {place.vibe?.slice(0, 1).map((vibe) => (
                           <span
                             key={vibe}
-                            className="rounded-full bg-[#F1E8E3] px-2 py-1 text-xs text-brown/90"
+                            className="rounded-full bg-[#E9E6D8] px-2 py-1 text-xs text-brown/90"
                           >
                             {vibe}
                           </span>
@@ -725,8 +738,7 @@ export default function DiscoverPage() {
             {dessertAndCafes.length === 0 ? (
               <div className="min-w-full rounded-3xl border border-[#29291F]/15 bg-white/85 p-5 text-sm lg:col-span-full lg:min-w-0">
                 <p>
-                  No {activeVibe === "All" ? "" : `${activeVibe} `}
-                  cafés or desserts found nearby.
+                  No cafés or desserts found nearby.
                 </p>
                 <button
                   type="button"
@@ -748,7 +760,7 @@ export default function DiscoverPage() {
                   onClick={() => handlePlaceClick(place)}
                   className="wayve-card flex min-w-52.5 max-w-52.5 cursor-pointer flex-col justify-between overflow-hidden lg:min-w-0 lg:max-w-none"
                 >
-                  <div className="relative flex h-32 items-center justify-center bg-[#F1E8E3] p-2">
+                  <div className="relative flex h-32 items-center justify-center bg-[#E9E6D8] p-2">
                     <span className="absolute left-3 top-3 z-10 rounded-full bg-black/40 px-2 py-1 text-xs text-white backdrop-blur-sm">
                       {place.priceTier === "Budget"
                         ? "₦"
@@ -776,13 +788,18 @@ export default function DiscoverPage() {
                         ? distance
                         : `${place.neighbourhood}${distance ? ` · ${distance}` : ""}`}
                     </p>
+                    {place.status === "Unverified" && (
+                      <p className="mt-1 text-xs font-medium text-amber-800">
+                        Not verified by Wayve
+                      </p>
+                    )}
 
                     <div className="mt-3 flex items-center justify-between">
                       <div className="flex gap-1">
                         {place.vibe?.slice(0, 1).map((vibe) => (
                           <span
                             key={vibe}
-                            className="rounded-full bg-[#F1E8E3] px-2 py-1 text-xs text-brown/90"
+                            className="rounded-full bg-[#E9E6D8] px-2 py-1 text-xs text-brown/90"
                           >
                             {vibe}
                           </span>

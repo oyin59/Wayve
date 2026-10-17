@@ -20,8 +20,9 @@ The project has moved from a basic app shell to a usable discovery prototype:
   in the current browser.
 - Onboarding, profile, saved places, empty states, and responsive navigation
   support the main discovery journey.
-- The interface has been refined around a warm ivory, olive, and blush visual
-  direction, with responsive layouts for phone, tablet, and desktop widths.
+- The interface has been refined around a warm ivory, olive, and muted ochre
+  and clay visual direction, with responsive layouts for phone, tablet, and
+  desktop widths.
 - The app includes a PWA manifest, install icon, service-worker registration,
   and an offline fallback.
 - Community and other unfinished destinations are kept out of the primary

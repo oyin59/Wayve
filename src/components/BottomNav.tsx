@@ -18,7 +18,7 @@ export default function BottomNav() {
           <span
             className={`flex h-8 w-10 items-center justify-center rounded-full text-lg ${
               isActive("/discover")
-                ? "bg-[#EE858B] text-[#29291F]"
+                ? "bg-[#D9B574] text-[#29291F]"
                 : "text-[#29291F]/65"
             }`}
           >
@@ -35,7 +35,7 @@ export default function BottomNav() {
           <span
             className={`flex h-8 w-10 items-center justify-center rounded-full text-lg ${
               isActive("/saved")
-                ? "bg-[#EE858B] text-[#29291F]"
+                ? "bg-[#D9B574] text-[#29291F]"
                 : "text-[#29291F]/65"
             }`}
           >
@@ -52,7 +52,7 @@ export default function BottomNav() {
           <span
             className={`flex h-8 w-10 items-center justify-center rounded-full text-lg ${
               isActive("/profile")
-                ? "bg-[#EE858B] text-[#29291F]"
+                ? "bg-[#D9B574] text-[#29291F]"
                 : "text-[#29291F]/65"
             }`}
           >

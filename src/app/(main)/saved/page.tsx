@@ -25,7 +25,7 @@ export default function SavedPage() {
       <div className="mx-auto max-w-6xl px-5 pt-7 sm:px-8 lg:pt-12">
         <header className="flex items-end justify-between gap-4 py-2">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#C85D58]">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#A75D43]">
               Your Wayve list
             </p>
             <h1 className="mt-1 font-serif text-3xl font-bold sm:text-4xl">
@@ -35,7 +35,7 @@ export default function SavedPage() {
               Good spots, all in one place.
             </p>
           </div>
-          <span className="mb-1 flex h-11 min-w-11 items-center justify-center rounded-full bg-[#F1E8E3] px-3 font-serif text-lg font-bold">
+          <span className="mb-1 flex h-11 min-w-11 items-center justify-center rounded-full bg-[#E9E6D8] px-3 font-serif text-lg font-bold">
             {savedPlaces.length}
           </span>
         </header>
@@ -65,7 +65,7 @@ export default function SavedPage() {
                         onClick={() => router.push(`/places/${place.id}`)}
                         className="flex min-w-0 flex-1 items-center gap-3 text-left sm:gap-4"
                       >
-                        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-[#F1E8E3] sm:h-24 sm:w-24">
+                        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-[#E9E6D8] sm:h-24 sm:w-24">
                           <PlaceImage
                             src={place.image}
                             alt={place.name}
@@ -89,7 +89,7 @@ export default function SavedPage() {
                               ? ` · ${formatPlaceProximity(distance, place.neighbourhood)}`
                               : ""}
                           </p>
-                          <span className="mt-2 inline-flex rounded-full bg-[#F1E8E3] px-2.5 py-1 text-xs font-medium">
+                          <span className="mt-2 inline-flex rounded-full bg-[#E9E6D8] px-2.5 py-1 text-xs font-medium">
                             {place.priceTier}
                           </span>
                         </div>
@@ -98,7 +98,7 @@ export default function SavedPage() {
                         type="button"
                         onClick={() => remove(place.id)}
                         aria-label={`Remove ${place.name} from saved places`}
-                        className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full text-xl text-[#29291F] transition hover:bg-[#F1E8E3] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#29291F]"
+                        className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full text-xl text-[#29291F] transition hover:bg-[#E9E6D8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#29291F]"
                       >
                         <span aria-hidden="true">♥</span>
                       </button>
@@ -109,7 +109,7 @@ export default function SavedPage() {
             </>
           ) : (
             <div className="rounded-[2rem] border border-[#29291F]/12 bg-white p-7 text-center shadow-sm sm:p-10">
-              <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-[#F1E8E3] text-3xl text-[#C85D58]">
+              <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-3xl bg-[#E9E6D8] text-3xl text-[#A75D43]">
                 ♡
               </span>
               <h2 className="mt-5 font-serif text-2xl font-semibold">

@@ -103,7 +103,7 @@ export default function AreaPickerPage() {
                 className={`text-left py-4 px-4 rounded-2xl border text-sm transition ${
                   selected
                     ? "bg-[#29291F] text-white border-[#29291F]"
-                    : "bg-white border-[#29291F]/15 text-[#29291F] hover:bg-[#EE858B]"
+                    : "bg-white border-[#29291F]/15 text-[#29291F] hover:bg-[#D9B574]"
                 }`}
               >
                 {selected && (

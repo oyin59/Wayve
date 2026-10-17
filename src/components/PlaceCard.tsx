@@ -15,6 +15,7 @@ const PRICE_SYMBOLS: Record<Place["priceTier"], string> = {
   Budget: "₦",
   "Mid-Range": "₦₦",
   Splurge: "₦₦₦",
+  "Not confirmed": "₦₦",
 };
 
 /** The large place card used on the Businesses list. */
@@ -59,6 +60,11 @@ export default function PlaceCard({ place, distanceKm, onClick }: PlaceCardProps
               📍 {distanceKm === 0 ? distance : place.neighbourhood}
               {distance && distanceKm !== 0 ? ` · ${distance}` : ""}
             </p>
+            {place.status === "Unverified" && (
+              <p className="mt-1 text-xs font-medium text-amber-800">
+                Not verified by Wayve
+              </p>
+            )}
           </div>
         </div>
 
@@ -67,7 +73,7 @@ export default function PlaceCard({ place, distanceKm, onClick }: PlaceCardProps
           {place.vibe.slice(0, 3).map((vibe) => (
             <span
               key={vibe}
-              className="rounded-full bg-[#F1E8E3] px-3 py-1 text-xs text-brown/90"
+              className="rounded-full bg-[#E9E6D8] px-3 py-1 text-xs text-brown/90"
             >
               {vibe}
             </span>

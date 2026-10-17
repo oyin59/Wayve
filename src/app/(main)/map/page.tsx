@@ -61,7 +61,7 @@ export default function MapPage() {
       </div>
       {/* Map Area */}
       <section className="px-5 mt-5 max-w-md mx-auto">
-        <div className="relative h-[420px] rounded-[2rem] overflow-hidden bg-[#F1E8E3] border border-[#29291F]/15 shadow-sm">
+        <div className="relative h-[420px] rounded-[2rem] overflow-hidden bg-[#E9E6D8] border border-[#29291F]/15 shadow-sm">
           <p className="absolute bottom-2 left-2 right-2 z-20 rounded-lg bg-white/90 px-3 py-2 text-center text-xs text-brown/70">
             Illustrative map · pins aren&apos;t exact locations.
           </p>
@@ -193,7 +193,7 @@ export default function MapPage() {
               className="w-full bg-white rounded-2xl p-4 flex items-center gap-3 text-left shadow-sm hover:shadow-md transition"
             >
               {/* Image */}
-              <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-[#F1E8E3] shrink-0">
+              <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-[#E9E6D8] shrink-0">
                 <PlaceImage
                   src={place.image}
                   alt={place.name}
@@ -271,7 +271,7 @@ export default function MapPage() {
                     className={`w-full text-left px-4 py-3 rounded-xl transition ${
                       selected
                         ? "bg-[#303820] font-semibold"
-                        : "bg-[#F1E8E3] hover:bg-[#EE858B]"
+                        : "bg-[#E9E6D8] hover:bg-[#D9B574]"
                     }`}
                   >
                     <div className="flex items-center justify-between">

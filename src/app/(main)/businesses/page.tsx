@@ -82,7 +82,7 @@ export default function BusinessesPage() {
                   className={`p-3 text-xs rounded-2xl border text-left transition-all ${
                     currentArea === area
                       ? "bg-brown text-white border-brown font-semibold"
-                      : "bg-white border-[#29291F]/15 text-brown hover:bg-[#F1E8E3]"
+                      : "bg-white border-[#29291F]/15 text-brown hover:bg-[#E9E6D8]"
                   }`}
                 >
                   📍 {area}

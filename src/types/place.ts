@@ -1,4 +1,4 @@
-export type PriceTier = "Budget" | "Mid-Range" | "Splurge";
+export type PriceTier = "Budget" | "Mid-Range" | "Splurge" | "Not confirmed";
 
 export interface Place {
   id: number;

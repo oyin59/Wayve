@@ -176,7 +176,7 @@ export default function CommunityPage() {
               </button>
             </div>
             {/* Image */}
-            <div className="relative w-full aspect-[4/3] bg-[#EE858B]">
+            <div className="relative w-full aspect-[4/3] bg-[#D9B574]">
               <PlaceImage src={post.image} alt={post.place} fallback={null} />
             </div>
             {/* Post content */}

@@ -92,7 +92,7 @@ export default function ReviewForm({ place }: ReviewFormProps) {
             disabled={!rating || !review.trim()}
             className={`w-full mt-6 py-4 rounded-2xl font-semibold ${
               rating && review.trim()
-                ? "bg-[#29291F] text-[#F1E8E3]"
+                ? "bg-[#29291F] text-[#E9E6D8]"
                 : "bg-[#29291F]/20 text-[#29291F]/40"
             }`}
           >

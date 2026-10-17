@@ -67,7 +67,7 @@ function ResultsContent() {
           ← Back to Discover
         </button>
 
-        <div className="mb-4 flex w-fit items-center gap-1.5 rounded-full bg-[#EE858B] px-3.5 py-2 text-xs font-medium text-[#29291F]">
+        <div className="mb-4 flex w-fit items-center gap-1.5 rounded-full bg-[#D9B574] px-3.5 py-2 text-xs font-medium text-[#29291F]">
           <span>✨</span>
           <span>
             Here are {matches.length} great{" "}
@@ -89,7 +89,7 @@ function ResultsContent() {
                   onClick={() => router.push(`/places/${place.id}`)}
                 >
                   <div>
-                    <div className="relative h-44 w-full bg-[#F1E8E3]">
+                    <div className="relative h-44 w-full bg-[#E9E6D8]">
                       <PlaceImage
                         src={place.image}
                         alt={place.name}
@@ -121,7 +121,7 @@ function ResultsContent() {
                         {place.vibe?.map((vibe) => (
                           <span
                             key={vibe}
-                            className="rounded-full bg-[#F1E8E3] px-2.5 py-1 text-xs text-[#29291F]"
+                            className="rounded-full bg-[#E9E6D8] px-2.5 py-1 text-xs text-[#29291F]"
                           >
                             {vibe}
                           </span>
@@ -201,7 +201,7 @@ function ResultsContent() {
         <button
           type="button"
           onClick={() => setShowFilter(true)}
-          className="mt-6 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-[#29291F] py-4 text-sm font-semibold text-[#EE858B] shadow-sm transition-opacity hover:opacity-90"
+          className="mt-6 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-[#29291F] py-4 text-sm font-semibold text-[#D9B574] shadow-sm transition-opacity hover:opacity-90"
         >
           <span>Change filters</span>
 

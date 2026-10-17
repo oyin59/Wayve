@@ -55,10 +55,10 @@ const SLIDES: Slide[] = [
           <div className="rounded-2xl bg-[#303820] flex items-center justify-center text-5xl">
             ☕
           </div>
-          <div className="rounded-2xl bg-[#EE858B] flex items-center justify-center text-5xl">
+          <div className="rounded-2xl bg-[#D9B574] flex items-center justify-center text-5xl">
             🍜
           </div>
-          <div className="rounded-2xl bg-[#EE858B] flex items-center justify-center text-5xl">
+          <div className="rounded-2xl bg-[#D9B574] flex items-center justify-center text-5xl">
             🌆
           </div>
           <div className="rounded-2xl bg-[#303820] flex items-center justify-center text-5xl">

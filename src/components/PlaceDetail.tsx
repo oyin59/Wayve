@@ -33,7 +33,7 @@ export default function PlaceDetail({ place }: PlaceDetailProps) {
 
   return (
     <main className="min-h-screen bg-[#FAF7F2] pb-28 text-[#29291F]">
-      <section className="relative mx-auto h-[25rem] min-h-[22rem] max-h-[72vh] max-w-2xl overflow-hidden bg-[#F1E8E3] sm:h-[34rem] sm:rounded-b-[2rem]">
+      <section className="relative mx-auto h-[25rem] min-h-[22rem] max-h-[72vh] max-w-2xl overflow-hidden bg-[#E9E6D8] sm:h-[34rem] sm:rounded-b-[2rem]">
         <PlaceImage
           src={place.image}
           alt={place.name}
@@ -75,7 +75,7 @@ export default function PlaceDetail({ place }: PlaceDetailProps) {
         </div>
       </section>
 
-      <div className="relative mx-auto -mt-5 max-w-2xl space-y-4 rounded-t-[1.75rem] bg-[#F1E8E3] px-5 pb-8 pt-6 sm:px-8">
+      <div className="relative mx-auto -mt-5 max-w-2xl space-y-4 rounded-t-[1.75rem] bg-[#E9E6D8] px-5 pb-8 pt-6 sm:px-8">
         {place.status === "Unverified" && (
           <p className="inline-flex items-center gap-2 rounded-full border border-amber-300 bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-900">
             <span aria-hidden="true">!</span>
@@ -97,7 +97,7 @@ export default function PlaceDetail({ place }: PlaceDetailProps) {
         <section aria-label="Place details" className="grid grid-cols-2 gap-3">
           {place.priceTier && (
             <div className="rounded-2xl border border-[#29291F]/15 bg-white/85 p-4 shadow-sm">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#EE858B] font-serif text-lg font-bold">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#D9B574] font-serif text-lg font-bold">
                 ₦
               </span>
               <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-[#29291F]">
@@ -108,7 +108,7 @@ export default function PlaceDetail({ place }: PlaceDetailProps) {
           )}
           {place.avgSpend && (
             <div className="rounded-2xl border border-[#29291F]/15 bg-white/85 p-4 shadow-sm">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F1E8E3] font-serif text-lg font-bold">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#E9E6D8] font-serif text-lg font-bold">
                 ↗
               </span>
               <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-[#29291F]">
@@ -121,7 +121,7 @@ export default function PlaceDetail({ place }: PlaceDetailProps) {
           )}
           {place.hours && (
             <div className="col-span-2 flex items-start gap-3 rounded-2xl border border-[#29291F]/15 bg-white/85 p-4 shadow-sm">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#F1E8E3] text-lg">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#E9E6D8] text-lg">
                 ◷
               </span>
               <div className="min-w-0">
@@ -150,7 +150,7 @@ export default function PlaceDetail({ place }: PlaceDetailProps) {
                   {place.address}
                 </p>
                 {proximity && (
-                  <p className="mt-2 text-xs font-medium text-[#EE858B]">
+                  <p className="mt-2 text-xs font-medium text-[#D9B574]">
                     {km === 0 ? `In ${place.neighbourhood}` : `${proximity} from ${area}`}
                   </p>
                 )}
@@ -166,7 +166,7 @@ export default function PlaceDetail({ place }: PlaceDetailProps) {
               {place.vibe.map((vibe) => (
                 <span
                   key={vibe}
-                  className="rounded-full bg-[#F1E8E3] px-3.5 py-2 text-sm font-medium text-[#29291F]"
+                  className="rounded-full bg-[#E9E6D8] px-3.5 py-2 text-sm font-medium text-[#29291F]"
                 >
                   {vibe}
                 </span>
@@ -182,7 +182,7 @@ export default function PlaceDetail({ place }: PlaceDetailProps) {
               {place.occasion.map((occasion) => (
                 <span
                   key={occasion}
-                  className="rounded-full border border-[#29291F]/15 bg-[#F1E8E3] px-3.5 py-2 text-sm font-medium"
+                  className="rounded-full border border-[#29291F]/15 bg-[#E9E6D8] px-3.5 py-2 text-sm font-medium"
                 >
                   {occasion}
                 </span>
@@ -198,7 +198,7 @@ export default function PlaceDetail({ place }: PlaceDetailProps) {
               {place.amenities.map((amenity) => (
                 <span
                   key={amenity}
-                  className="rounded-full bg-[#EE858B] px-3.5 py-2 text-sm font-medium"
+                  className="rounded-full bg-[#D9B574] px-3.5 py-2 text-sm font-medium"
                 >
                   {amenity}
                 </span>
@@ -235,7 +235,7 @@ export default function PlaceDetail({ place }: PlaceDetailProps) {
               save(place.id);
               router.push("/saved");
             }}
-            className="col-span-2 flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-[#29291F]/20 bg-white px-4 py-3 text-sm font-semibold text-[#29291F] transition hover:bg-[#F1E8E3] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#29291F]"
+            className="col-span-2 flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-[#29291F]/20 bg-white px-4 py-3 text-sm font-semibold text-[#29291F] transition hover:bg-[#E9E6D8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#29291F]"
           >
             <span aria-hidden="true">♡</span>
             Save place

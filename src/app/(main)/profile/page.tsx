@@ -47,7 +47,7 @@ export default function ProfilePage() {
             <div className="flex items-center gap-4">
               <div
                 aria-hidden="true"
-                className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#29291F] font-serif text-3xl font-bold text-[#EE858B] shadow-sm"
+                className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#29291F] font-serif text-3xl font-bold text-[#D9B574] shadow-sm"
               >
                 {displayName ? displayName.charAt(0).toUpperCase() : "W"}
               </div>
@@ -59,7 +59,7 @@ export default function ProfilePage() {
                   Your area and saved spots, all in one place.
                 </p>
               </div>
-              <div className="hidden shrink-0 rounded-2xl bg-[#F1E8E3] px-3 py-2 text-center sm:block">
+              <div className="hidden shrink-0 rounded-2xl bg-[#E9E6D8] px-3 py-2 text-center sm:block">
                 <p className="font-serif text-xl font-bold">{savedIds.length}</p>
                 <p className="text-[10px] font-semibold uppercase tracking-wide text-[#29291F]">
                   Saved
@@ -107,7 +107,7 @@ export default function ProfilePage() {
                   setNameDraft(displayName);
                   setEditingName(true);
                 }}
-                className="mt-5 min-h-11 rounded-xl border border-[#29291F]/25 bg-[#F1E8E3] px-4 py-2.5 text-sm font-semibold text-[#29291F] transition hover:bg-[#F1E8E3] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#29291F]"
+                className="mt-5 min-h-11 rounded-xl border border-[#29291F]/25 bg-[#E9E6D8] px-4 py-2.5 text-sm font-semibold text-[#29291F] transition hover:bg-[#E9E6D8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#29291F]"
               >
                 {displayName ? "Edit name" : "Add your name"}
                 <span aria-hidden="true" className="ml-2 text-[#29291F]">
@@ -136,7 +136,7 @@ export default function ProfilePage() {
             <button
               type="button"
               onClick={() => setShowAreaPicker(true)}
-              className="flex min-h-[5.5rem] w-full items-center gap-4 p-4 text-left transition hover:bg-[#F1E8E3] sm:p-5"
+              className="flex min-h-[5.5rem] w-full items-center gap-4 p-4 text-left transition hover:bg-[#E9E6D8] sm:p-5"
             >
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#303820] text-lg">
                 📍
@@ -158,7 +158,7 @@ export default function ProfilePage() {
             <button
               type="button"
               onClick={() => router.push("/saved")}
-              className="flex min-h-[5.5rem] w-full items-center gap-4 p-4 text-left transition hover:bg-[#F1E8E3] sm:p-5"
+              className="flex min-h-[5.5rem] w-full items-center gap-4 p-4 text-left transition hover:bg-[#E9E6D8] sm:p-5"
             >
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#303820] text-xl">
                 ♡
@@ -169,7 +169,7 @@ export default function ProfilePage() {
                   Your shortlist of places to visit
                 </span>
               </span>
-              <span className="rounded-full bg-[#F1E8E3] px-3 py-1 text-sm font-bold">
+              <span className="rounded-full bg-[#E9E6D8] px-3 py-1 text-sm font-bold">
                 {savedIds.length}
               </span>
               <span aria-hidden="true" className="text-xl text-[#29291F]">
@@ -179,7 +179,7 @@ export default function ProfilePage() {
           </div>
         </section>
 
-        <aside className="flex items-start gap-3 rounded-3xl border border-[#29291F]/15 bg-[#F1E8E3] p-4 sm:p-5">
+        <aside className="flex items-start gap-3 rounded-3xl border border-[#29291F]/15 bg-[#E9E6D8] p-4 sm:p-5">
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-[#29291F]">
             ✓
           </span>
@@ -220,7 +220,7 @@ export default function ProfilePage() {
                 type="button"
                 onClick={() => setShowAreaPicker(false)}
                 aria-label="Close area picker"
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#F1E8E3] text-xl text-[#29291F]/70"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-[#E9E6D8] text-xl text-[#29291F]/70"
               >
                 ×
               </button>
@@ -238,7 +238,7 @@ export default function ProfilePage() {
                   className={`min-h-11 rounded-xl border px-3 py-3 text-left text-sm transition ${
                     area === option
                       ? "border-[#29291F] bg-[#29291F] font-semibold text-white"
-                      : "border-[#29291F]/15 bg-[#F1E8E3] hover:bg-[#F1E8E3]"
+                      : "border-[#29291F]/15 bg-[#E9E6D8] hover:bg-[#E9E6D8]"
                   }`}
                 >
                   {option}

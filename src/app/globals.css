@@ -4,18 +4,18 @@
   --color-wayve-paper: #FAF7F2;
   --color-wayve-ink: #29291F;
   --color-wayve-olive: #303820;
-  --color-wayve-blush: #F1E8E3;
-  --color-wayve-coral: #EE858B;
-  --color-wayve-terracotta: #C85D58;
+  --color-wayve-stone: #E9E6D8;
+  --color-wayve-ochre: #D9B574;
+  --color-wayve-clay: #A75D43;
 
   --color-chambray: var(--color-wayve-olive);
   --color-espresso: var(--color-wayve-ink);
-  --color-glacier: var(--color-wayve-blush);
-  --color-bisque: var(--color-wayve-coral);
-  --color-clay: var(--color-wayve-terracotta);
+  --color-glacier: var(--color-wayve-stone);
+  --color-bisque: var(--color-wayve-ochre);
+  --color-clay: var(--color-wayve-clay);
 
-  --color-blue-sky: var(--color-wayve-coral);
-  --color-butter: var(--color-wayve-blush);
+  --color-blue-sky: var(--color-wayve-clay);
+  --color-butter: var(--color-wayve-stone);
   --color-brown: var(--color-espresso);
   --color-wayve-blue: var(--color-chambray);
   --font-serif: "Iowan Old Style", "Baskerville", "Times New Roman", serif;
